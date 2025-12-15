@@ -73,6 +73,84 @@
             }
         }
 
+        /* --- DECORATIONS --- */
+        /* --- DECORATIONS --- */
+        #decorations {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            pointer-events: none;
+            z-index: 10;
+            /* Lower z-index so content scrolls OVER it */
+            overflow: hidden;
+        }
+
+        .cutout {
+            position: absolute;
+            opacity: 1;
+            filter: drop-shadow(0 10px 20px rgba(0, 0, 0, 0.15));
+            transition: all 0.5s ease;
+        }
+
+        /* Grouping Bottom Left */
+        .cutout-esme {
+            width: 180px;
+            bottom: -10px;
+            left: -10px;
+            transform: rotate(-5deg);
+        }
+
+        .cutout-moto {
+            width: 140px;
+            bottom: -10px;
+            left: 100px;
+            /* Adjacent to Esme */
+            transform: rotate(10deg);
+            z-index: -1;
+            /* Behind Esme */
+            opacity: 1;
+        }
+
+        @media (max-width: 768px) {
+
+            /* Mobile: Smaller, but staying bottom left behind content */
+            .cutout-esme {
+                width: 45vw;
+                max-width: 180px;
+                left: -20px;
+                bottom: -10px;
+            }
+
+            .cutout-moto {
+                width: 35vw;
+                max-width: 140px;
+                left: 30vw;
+                /* Offset */
+                bottom: -10px;
+            }
+        }
+
+        @media (min-width: 769px) {
+            .cutout-esme {
+                width: 300px;
+                bottom: -40px;
+                left: -20px;
+                right: auto;
+                /* Reset */
+                transform: rotate(0deg);
+            }
+
+            .cutout-moto {
+                width: 250px;
+                bottom: -20px;
+                left: 180px;
+                /* Next to Esme's updated size */
+                transform: rotate(5deg);
+            }
+        }
+
         /* --- DYNAMIC BACKGROUND LAYERS --- */
         #bg-dynamic {
             position: fixed;
@@ -84,6 +162,13 @@
             background-color: var(--bg-pinstripe-1);
             transition: background-color 1.5s ease;
             /* Smooth transition */
+        }
+
+        /* Ensure Content sits above Decorations */
+        .art-card,
+        main {
+            position: relative;
+            z-index: 20;
         }
 
         /* --- LAYOUT --- */
@@ -298,7 +383,8 @@
         /* --- FIXED METADATA FOOTER (Desktop) --- */
         #artwork-footer {
             position: fixed;
-            bottom: 40px;
+            bottom: 250px;
+            /* Raised to clear cutouts */
             /* Space from bottom */
             left: 2rem;
             /* Align with sidebar padding (which is 2rem) */
@@ -451,6 +537,12 @@
         </div>
         <div id="progress-dots">
         </div>
+    </div>
+
+    <!-- DECORATIONS moved here -->
+    <div id="decorations">
+        <img src="assets/images/esme.png" class="cutout cutout-esme" alt="Decor">
+        <img src="assets/images/motorcycle.png" class="cutout cutout-moto" alt="Decor">
     </div>
 
     <div class="container">
