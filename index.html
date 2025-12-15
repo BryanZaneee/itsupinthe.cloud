@@ -1,0 +1,747 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Esmeralda - Portfolio</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400;1,6..96,400&family=Monsieur+La+Doulaise&display=swap"
+        rel="stylesheet">
+
+    <style>
+        /* --- RESET & VARIABLES --- */
+        :root {
+            --bg-pinstripe-1: #fdfbf7;
+            --bg-pinstripe-2: #c4d0e0;
+            --bg-clay: #e0cec7;
+            --bg-paper: #ffffff;
+            --text-main: #1a1a1a;
+            --font-hand: 'Monsieur La Doulaise', cursive;
+            --font-body: 'Bodoni Moda', serif;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            cursor: none;
+        }
+
+        body {
+            font-family: var(--font-body);
+            color: var(--text-main);
+            overflow-x: hidden;
+            background-color: var(--bg-pinstripe-1);
+        }
+
+        /* --- CUSTOM CURSOR --- */
+        #cursor {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 15px;
+            height: 15px;
+            /* background-color: #ff3333; REMOVED */
+            border: 1.5px solid #000;
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 9999;
+            transform: translate(-50%, -50%);
+            transition: width 0.3s, height 0.3s;
+            /* mix-blend-mode: difference; REMOVED for visibility */
+        }
+
+        #cursor.hovered {
+            width: 40px;
+            height: 40px;
+            background-color: transparent;
+            border: 1px solid #000;
+        }
+
+        @media (max-width: 768px) {
+            #cursor {
+                display: none;
+                /* No cursor on mobile */
+            }
+
+            * {
+                cursor: auto;
+            }
+        }
+
+        /* --- DYNAMIC BACKGROUND LAYERS --- */
+        #bg-dynamic {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: -1;
+            background-color: var(--bg-pinstripe-1);
+            transition: background-color 1.5s ease;
+            /* Smooth transition */
+        }
+
+        /* --- LAYOUT --- */
+        .container {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* --- MOBILE HEADER --- */
+        #mobile-header {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            padding: 20px;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 200;
+            mix-blend-mode: difference;
+            /* Ensure visibility */
+            color: #fff;
+            /* Inverted due to difference */
+        }
+
+        .mobile-logo {
+            font-family: var(--font-body);
+            text-transform: uppercase;
+            font-weight: 700;
+            font-size: 1.2rem;
+            letter-spacing: 1px;
+        }
+
+        .menu-toggle {
+            font-family: var(--font-body);
+            font-style: italic;
+            font-size: 1rem;
+            cursor: pointer;
+        }
+
+        /* --- SIDEBAR NAV --- */
+        nav {
+            width: 250px;
+            padding: 4rem 2rem;
+            position: fixed;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            z-index: 150;
+            transition: transform 0.4s ease;
+        }
+
+        .logo {
+            font-family: var(--font-body);
+            text-transform: uppercase;
+            font-size: 1.8rem;
+            letter-spacing: 2px;
+            font-weight: 700;
+        }
+
+        .menu-items {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            margin-top: 3rem;
+            /* Adjusted to be near logo */
+            padding-left: 0;
+            /* Force align */
+        }
+
+        /* Helper for optical alignment of 'Works' */
+        .menu-items>div:first-child .nav-link {
+            padding-left: 5px;
+        }
+
+        /* Ensure all direct children divs align */
+        .menu-items>div {
+            padding-left: 0;
+            margin-left: 0;
+        }
+
+        .nav-link {
+            display: block;
+            font-family: var(--font-hand);
+            font-size: 2rem;
+            text-decoration: none;
+            color: var(--text-main);
+            transition: transform 0.3s ease;
+            position: relative;
+        }
+
+        .nav-link:hover {
+            transform: translateX(10px);
+        }
+
+        .sub-menu {
+            max-height: 0;
+            overflow: hidden;
+            margin-left: 1rem;
+            transition: max-height 0.5s ease;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .has-submenu:hover .sub-menu {
+            max-height: 200px;
+            margin-top: 0.5rem;
+        }
+
+        .sub-link {
+            font-family: var(--font-body);
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: #666;
+            text-decoration: none;
+            padding: 5px 0;
+            display: block;
+        }
+
+        .sub-link:hover {
+            color: #000;
+        }
+
+        .socials {
+            font-size: 0.75rem;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            color: #888;
+            margin-bottom: 150px;
+        }
+
+        /* --- MAIN CONTENT (Vertical Feed) --- */
+        main {
+            margin-left: 250px;
+            width: calc(100% - 250px);
+            padding-bottom: 150px;
+        }
+
+        .art-feed {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 15vh;
+            padding-top: 10vh;
+        }
+
+        .art-card {
+            width: 70%;
+            max-width: 900px;
+            position: relative;
+        }
+
+        .image-wrapper {
+            width: 100%;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.15);
+            background: #ccc;
+        }
+
+        .image-wrapper img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        /* Styling Variants */
+        .art-card[data-type="3d-art"] .image-wrapper {
+            border-radius: 5px;
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.2);
+        }
+
+        .art-card[data-type="drawing"] .image-wrapper {
+            border: 15px solid #fff;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+        }
+
+        /* Mobile Metadata (Hidden on desktop) */
+        .mobile-meta {
+            display: none;
+            margin-top: 1rem;
+            text-align: left;
+        }
+
+        .mobile-meta h3 {
+            font-size: 1rem;
+            font-family: var(--font-body);
+            font-weight: 700;
+            margin-bottom: 0.3rem;
+        }
+
+        .mobile-meta p {
+            font-size: 0.8rem;
+            font-family: var(--font-body);
+            font-style: italic;
+            color: #555;
+        }
+
+        /* --- CLOSE BUTTON (Mobile Menu) --- */
+        .close-menu-btn {
+            display: none;
+            /* Hidden on desktop */
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            font-family: var(--font-body);
+            font-size: 1.5rem;
+            cursor: pointer;
+            padding: 10px;
+        }
+
+        /* --- FIXED METADATA FOOTER (Desktop) --- */
+        #artwork-footer {
+            position: fixed;
+            bottom: 40px;
+            /* Space from bottom */
+            left: 2rem;
+            /* Align with sidebar padding (which is 2rem) */
+            width: 250px;
+            /* Match sidebar width */
+            padding-right: 20px;
+            z-index: 100;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            pointer-events: none;
+        }
+
+        #meta-info {
+            transition: opacity 0.3s ease;
+        }
+
+        #meta-title {
+            font-family: var(--font-body);
+            font-weight: 700;
+            font-size: 1rem;
+            margin-bottom: 5px;
+        }
+
+        #meta-details {
+            font-family: var(--font-body);
+            font-size: 0.8rem;
+            font-style: italic;
+            color: #555;
+        }
+
+        #progress-dots {
+            display: flex;
+            gap: 8px;
+        }
+
+        .dot {
+            width: 6px;
+            height: 6px;
+            background-color: #bbb;
+            border-radius: 50%;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+        }
+
+        .dot.active {
+            background-color: #000;
+            transform: scale(1.3);
+        }
+
+        /* --- RESPONSIVE / MOBILE --- */
+        @media (max-width: 768px) {
+            #mobile-header {
+                display: flex;
+            }
+
+            .container {
+                flex-direction: column;
+            }
+
+            nav {
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100vw;
+                height: 100vh;
+                background: var(--bg-pinstripe-1);
+                /* Use solid color to cover content */
+                transform: translateX(100%);
+                /* Hidden by default */
+                padding: 6rem 2rem;
+                /* Add top padding to clear header */
+                align-items: center;
+                text-align: center;
+            }
+
+            nav.open {
+                transform: translateX(0);
+            }
+
+            nav .logo {
+                display: none;
+                /* Logo is in header now */
+            }
+
+            main {
+                margin-left: 0;
+                width: 100%;
+                padding-top: 60px;
+                /* Space for header */
+            }
+
+            .art-card {
+                width: 90%;
+            }
+
+            /* Show mobile meta, hide desktop meta */
+            .mobile-meta {
+                display: block;
+            }
+
+            /* Show close button */
+            .close-menu-btn {
+                display: block;
+            }
+
+            /* Hide socials in mobile menu as requested */
+            .socials {
+                display: none;
+            }
+
+            #artwork-footer {
+                display: none;
+            }
+
+            .art-feed {
+                gap: 5vh;
+                /* Smaller gap on mobile */
+            }
+
+            /* Drawing border adjustment for small screens */
+            .art-card[data-type="drawing"] .image-wrapper {
+                border-width: 8px;
+            }
+
+            #bg-dynamic {
+                /* On mobile, maybe subtle or same? */
+                /* Let's keep it. */
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div id="bg-dynamic"></div>
+
+    <!-- Mobile Header -->
+    <div id="mobile-header">
+        <div class="mobile-logo">ESMERALDA</div>
+        <div class="menu-toggle" id="menu-toggle">Menu</div>
+    </div>
+
+    <div id="cursor"></div>
+
+    <!-- Desktop Footer Info (Hidden on mobile) -->
+    <div id="artwork-footer">
+        <div id="meta-info">
+            <div id="meta-title">Loading...</div>
+            <div id="meta-details">Scroll to view works</div>
+        </div>
+        <div id="progress-dots">
+        </div>
+    </div>
+
+    <div class="container">
+        <!-- Navigation (Sidebar on Desktop, Full Overlay on Mobile) -->
+        <nav id="main-nav">
+            <div class="close-menu-btn" id="close-menu-btn">✕</div>
+            <div class="logo">ESMERALDA</div>
+
+            <div class="menu-items">
+                <div class="has-submenu">
+                    <a href="#" class="nav-link">Works</a>
+                    <div class="sub-menu">
+                        <a href="#" class="sub-link">Paintings</a>
+                        <a href="#" class="sub-link">Drawings</a>
+                        <a href="#" class="sub-link">3D-Art</a>
+                    </div>
+                </div>
+
+                <div>
+                    <a href="#" class="nav-link">About</a>
+                </div>
+                <div>
+                    <a href="#" class="nav-link">Contact</a>
+                </div>
+            </div>
+
+            <div class="socials">
+                <!-- INSTAGRAM removed internally, but div kept for layout spacing if needed? 
+                     User said "remove instagram text again". 
+                     So I will leave this empty or remove it. Better remove it based on request. 
+                     Wait, looking at previous request: "ensure the instagram text is back".
+                     Then latest: "remove the instagram text again".
+                     Okay, removing. -->
+            </div>
+        </nav>
+
+        <main>
+            <div class="art-feed" id="art-feed">
+                <!-- Artworks rendered via JS -->
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // --- DATA: ALL ARTWORKS ---
+        const artworks = [
+
+            // 3D-ART
+            { src: 'assets/images/tHE jOURNEY oF uS.jpg', type: '3d-art', title: 'The Journey of Us', medium: '3D-Art', color: '#a68a82' },
+            { src: 'assets/images/tHE jOURNEY oF uS_45_view.jpg', type: '3d-art', title: 'The Journey of Us (45 View)', medium: '3D-Art', color: '#b3958e' },
+            { src: 'assets/images/tHE jOURNEY oF uS_closeup.jpg', type: '3d-art', title: 'The Journey of Us (Closeup)', medium: '3D-Art', color: '#806d57' },
+            { src: 'assets/images/tHE jOURNEY oF uS_side_view_1.jpg', type: '3d-art', title: 'The Journey of Us (Side View 1)', medium: '3D-Art', color: '#bca89b' },
+            { src: 'assets/images/tHE jOURNEY oF uS_side_view_2.jpg', type: '3d-art', title: 'The Journey of Us (Side View 2)', medium: '3D-Art', color: '#b9a59b' },
+
+            // DRAWINGS
+            { src: 'assets/images/Hernandez, Esmeralda_01.jpg', type: 'drawing', title: 'Hernandez, Esmeralda 01', medium: 'Drawing', color: '#999a9a' },
+            { src: 'assets/images/Hernandez, Esmeralda_02.jpg', type: 'drawing', title: 'Hernandez, Esmeralda 02', medium: 'Drawing', color: '#888575' },
+            { src: 'assets/images/Hernandez, Esmeralda_02(1).jpg', type: 'drawing', title: 'Hernandez, Esmeralda 02 (1)', medium: 'Drawing', color: '#868572' },
+            { src: 'assets/images/Hernandez, Esmeralda_03.jpg', type: 'drawing', title: 'Hernandez, Esmeralda 03', medium: 'Drawing', color: '#817871' },
+            { src: 'assets/images/Hernandez, Esmeralda_04.jpg', type: 'drawing', title: 'Hernandez, Esmeralda 04', medium: 'Drawing', color: '#dbd3c3' },
+            { src: 'assets/images/Hernandez, Esmeralda_06.jpg', type: 'drawing', title: 'Hernandez, Esmeralda 06', medium: 'Drawing', color: '#a2998d' },
+
+            // PAINTINGS
+            { src: 'assets/images/With Her Hands.jpg', type: 'painting', title: 'With Her Hands', medium: 'Painting', color: '#ab8371' }, // Missing in script output? Defaulting.
+            { src: 'assets/images/Untitled_Artwork.JPG', type: 'painting', title: 'Untitled Artwork', medium: 'Painting', color: '#7e766f' }, // Missing?
+            { src: 'assets/images/FullSizeRender.jpg', type: 'painting', title: 'FullSizeRender', medium: 'Painting', color: '#a6a5a0' },
+            { src: 'assets/images/IMG_9126.JPEG', type: 'painting', title: 'IMG_9126', medium: 'Painting', color: '#968a79' },
+            { src: 'assets/images/IMG_5143.jpg', type: 'painting', title: 'IMG_5143', medium: 'Painting', color: '#8d877d' },
+            { src: 'assets/images/IMG_5141.jpg', type: 'painting', title: 'IMG_5141', medium: 'Painting', color: '#888075' },
+            { src: 'assets/images/IMG_5090.jpg', type: 'painting', title: 'IMG_5090', medium: 'Painting', color: '#9a8a7b' },
+            { src: 'assets/images/IMG_5086.jpg', type: 'painting', title: 'IMG_5086', medium: 'Painting', color: '#af9478' },
+            { src: 'assets/images/IMG_5081.jpg', type: 'painting', title: 'IMG_5081', medium: 'Painting', color: '#9b9b91' },
+            { src: 'assets/images/IMG_5076.jpg', type: 'painting', title: 'IMG_5076', medium: 'Painting', color: '#9f9084' },
+            { src: 'assets/images/IMG_5072.jpg', type: 'painting', title: 'IMG_5072', medium: 'Painting', color: '#b8ada4' },
+            { src: 'assets/images/IMG_5066.jpg', type: 'painting', title: 'IMG_5066', medium: 'Painting', color: '#b6ada6' },
+            { src: 'assets/images/IMG_5059.jpg', type: 'painting', title: 'IMG_5059', medium: 'Painting', color: '#b4a097' },
+            { src: 'assets/images/IMG_5056.jpg', type: 'painting', title: 'IMG_5056', medium: 'Painting', color: '#b0a89f' },
+            { src: 'assets/images/IMG_5053.jpg', type: 'painting', title: 'IMG_5053', medium: 'Painting', color: '#a69f97' },
+            { src: 'assets/images/IMG_5047.jpg', type: 'painting', title: 'IMG_5047', medium: 'Painting', color: '#b9b0a7' },
+            { src: 'assets/images/IMG_4963.JPG', type: 'painting', title: 'IMG_4963', medium: 'Painting', color: '#9f9e96' },
+            { src: 'assets/images/IMG_4956.JPG', type: 'painting', title: 'IMG_4956', medium: 'Painting', color: '#a1988d' },
+            { src: 'assets/images/IMG_4809.jpg', type: 'painting', title: 'IMG_4809', medium: 'Painting', color: '#967761' },
+            { src: 'assets/images/IMG_4707.jpg', type: 'painting', title: 'IMG_4707', medium: 'Painting', color: '#9f8374' },
+            { src: 'assets/images/IMG_2910.jpeg', type: 'painting', title: 'IMG_2910', medium: 'Painting', color: '#afa797' },
+            { src: 'assets/images/IMG_2910.JPG', type: 'painting', title: 'IMG_2910', medium: 'Painting', color: '#8e7b54' },
+            { src: 'assets/images/IMG_2838(1).jpg', type: 'painting', title: 'IMG_2838(1)', medium: 'Painting', color: '#a5a59f' }, // Missing in snapshot, defaulting
+            { src: 'assets/images/IMG_2837.jpg', type: 'painting', title: 'IMG_2837', medium: 'Painting', color: '#acada3' },
+            { src: 'assets/images/IMG_2835.jpg', type: 'painting', title: 'IMG_2835', medium: 'Painting', color: '#b3afa6' },
+            { src: 'assets/images/IMG_2833(1).jpg', type: 'painting', title: 'IMG_2833(1)', medium: 'Painting', color: '#aeab9f' },
+            { src: 'assets/images/IMG_2831.jpg', type: 'painting', title: 'IMG_2831', medium: 'Painting', color: '#a4a7a0' },
+            { src: 'assets/images/IMG_2826(1).jpg', type: 'painting', title: 'IMG_2826(1)', medium: 'Painting', color: '#acaba8' }, // Missing 
+            { src: 'assets/images/IMG_2825(1).jpg', type: 'painting', title: 'IMG_2825(1)', medium: 'Painting', color: '#b9bab9' },
+            { src: 'assets/images/IMG_2823.jpg', type: 'painting', title: 'IMG_2823', medium: 'Painting', color: '#a4a5a0' },
+            { src: 'assets/images/IMG_2817.jpg', type: 'painting', title: 'IMG_2817', medium: 'Painting', color: '#a19a8f' }, // Missing
+            { src: 'assets/images/IMG_2815.jpg', type: 'painting', title: 'IMG_2815', medium: 'Painting', color: '#b4b2ac' }, // Missing
+            { src: 'assets/images/IMG_2743.jpg', type: 'painting', title: 'IMG_2743', medium: 'Painting', color: '#bda8a5' }, // Missing
+            { src: 'assets/images/IMG_2741.jpg', type: 'painting', title: 'IMG_2741', medium: 'Painting', color: '#c5afac' }, // Missing
+            { src: 'assets/images/IMG_2702.JPEG', type: 'painting', title: 'IMG_2702', medium: 'Painting', color: '#575a5a' },
+            { src: 'assets/images/IMG_2664.jpg', type: 'painting', title: 'IMG_2664', medium: 'Painting', color: '#a4a5a5' },
+            { src: 'assets/images/IMG_2661.jpeg', type: 'painting', title: 'IMG_2661', medium: 'Painting', color: '#a8a69d' }, // Missing
+            { src: 'assets/images/IMG_2659.jpeg', type: 'painting', title: 'IMG_2659', medium: 'Painting', color: '#aea297' },
+            { src: 'assets/images/IMG_2658.jpeg', type: 'painting', title: 'IMG_2658', medium: 'Painting', color: '#aeaca5' },
+            { src: 'assets/images/IMG_2657.jpeg', type: 'painting', title: 'IMG_2657', medium: 'Painting', color: '#afaba5' } // Missing
+        ];
+
+        // --- 1. CURSOR ---
+        const cursor = document.getElementById('cursor');
+        document.addEventListener('mousemove', (e) => {
+            cursor.style.left = e.clientX + 'px';
+            cursor.style.top = e.clientY + 'px';
+        });
+
+        function attachCursorHover() {
+            document.querySelectorAll('a').forEach(el => {
+                el.addEventListener('mouseenter', () => cursor.classList.add('hovered'));
+                el.addEventListener('mouseleave', () => cursor.classList.remove('hovered'));
+            });
+        }
+        attachCursorHover();
+
+        // --- 2. RENDER LOGIC ---
+        const artFeed = document.getElementById('art-feed');
+        const dotsContainer = document.getElementById('progress-dots');
+
+        let observer; // Global observer
+
+        function renderArtworks(filterType = 'all') {
+            // Clear current
+            artFeed.innerHTML = '';
+            dotsContainer.innerHTML = '';
+
+            // Filter
+            const filtered = filterType === 'all'
+                ? artworks
+                : artworks.filter(art => art.type === filterType);
+
+            // Populate HTML
+            filtered.forEach(art => {
+                const card = document.createElement('div');
+                card.className = 'art-card';
+                card.dataset.type = art.type;
+                card.dataset.title = art.title;
+                card.dataset.medium = art.medium;
+                card.dataset.color = art.color;
+
+                const wrapper = document.createElement('div');
+                wrapper.className = 'image-wrapper';
+
+                const img = document.createElement('img');
+                img.src = art.src;
+                img.alt = art.title;
+                img.loading = "lazy";
+
+                wrapper.appendChild(img);
+
+                // Add Mobile Metadata Inside Card
+                const mobileMeta = document.createElement('div');
+                mobileMeta.className = 'mobile-meta';
+
+                const mTitle = document.createElement('h3');
+                mTitle.textContent = art.title;
+
+                const mDetail = document.createElement('p');
+                mDetail.textContent = art.medium;
+
+                mobileMeta.appendChild(mTitle);
+                mobileMeta.appendChild(mDetail);
+
+                card.appendChild(wrapper);
+                card.appendChild(mobileMeta); // Added after wrapper
+
+                artFeed.appendChild(card);
+            });
+
+            // Re-initialize dots
+            filtered.forEach((_, index) => {
+                const dot = document.createElement('div');
+                dot.className = 'dot';
+                if (index === 0) dot.classList.add('active');
+                dotsContainer.appendChild(dot);
+            });
+
+            // Re-initialize Observer
+            setTimeout(() => {
+                initObserver();
+            }, 100);
+        }
+
+        // --- 3. SCROLL OBSERVER ---
+        const metaTitle = document.getElementById('meta-title');
+        const metaDetails = document.getElementById('meta-details');
+
+        // Dynamic Background
+        const bgDynamic = document.getElementById('bg-dynamic');
+
+        function setBackground(color) {
+            bgDynamic.style.backgroundColor = color;
+        }
+
+        function initObserver() {
+            if (observer) observer.disconnect();
+
+            const cards = document.querySelectorAll('.art-card');
+            const dots = document.querySelectorAll('.dot');
+
+            const observerOptions = {
+                root: null,
+                rootMargin: '-40% 0px -40% 0px',
+                threshold: 0
+            };
+
+            observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        const card = entry.target;
+                        const index = Array.from(cards).indexOf(card);
+
+                        // 1. Update Text (Desktop)
+                        metaTitle.textContent = card.dataset.title || 'Untitled';
+                        metaDetails.textContent = card.dataset.medium || 'Various Media';
+
+                        // 2. Update Dots (Desktop)
+                        dots.forEach(d => d.classList.remove('active'));
+                        if (dots[index]) dots[index].classList.add('active');
+
+                        // 3. Update Background
+                        setBackground(card.dataset.color || '#fdfbf7');
+                    }
+                });
+            }, observerOptions);
+
+            cards.forEach(card => observer.observe(card));
+
+            // Initialize first card
+            if (cards.length > 0) {
+                metaTitle.textContent = cards[0].dataset.title;
+                metaDetails.textContent = cards[0].dataset.medium;
+                setBackground(cards[0].dataset.color || '#fdfbf7');
+            } else {
+                metaTitle.textContent = "";
+                metaDetails.textContent = "";
+                setBackground('#fdfbf7');
+            }
+        }
+
+        // --- 4. NAVIGATION HANDLERS ---
+        const mainNav = document.getElementById('main-nav');
+        const menuToggle = document.getElementById('menu-toggle');
+        const closeMenuBtn = document.getElementById('close-menu-btn');
+
+        // Toggle Menu
+        menuToggle.addEventListener('click', () => {
+            mainNav.classList.add('open');
+            // Ensure text is visible on nav background
+            menuToggle.style.color = '#000';
+        });
+
+        // Close Button
+        closeMenuBtn.addEventListener('click', () => {
+            mainNav.classList.remove('open');
+            menuToggle.textContent = 'Menu';
+            menuToggle.style.color = ''; // Revert
+        });
+
+        // Close menu on link click
+        document.querySelectorAll('.sub-link, .nav-link').forEach(link => {
+            link.addEventListener('click', (e) => {
+                const text = link.textContent.toLowerCase();
+                let type = 'all';
+                if (text.includes('painting')) type = 'painting';
+                else if (text.includes('drawing')) type = 'drawing';
+                else if (text.includes('3d-art')) type = '3d-art';
+
+                if (link.classList.contains('sub-link') || link.tagName === 'A') {
+                    // Check if it's the specific filters
+                    if (['paintings', 'drawings', '3d-art', 'works'].some(t => text.includes(t))) {
+                        e.preventDefault();
+                        renderArtworks(type);
+                        window.scrollTo({ top: 0, behavior: 'smooth' });
+                        mainNav.classList.remove('open');
+                        menuToggle.textContent = 'Menu';
+                        menuToggle.style.color = '';
+                    }
+                }
+            });
+        });
+
+        // --- INITIAL RENDER ---
+        renderArtworks('all');
+
+    </script>
+</body>
+
+</html>
