@@ -1,0 +1,9 @@
+node_modules/
+.DS_Store
+*.HEIC
+*.heic
+*.mov
+*.MOV
+*.pdf
+**/screenshot*.png
+**/Screenshot*.png

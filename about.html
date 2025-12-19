@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Esmeralda - About</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400;1,6..96,400&family=Monsieur+La+Doulaise&display=swap"
+        rel="stylesheet">
+
+    <style>
+        /* --- RESET & VARIABLES --- */
+        :root {
+            --bg-pinstripe-1: #fdfbf7;
+            --text-main: #1a1a1a;
+            --font-hand: 'Monsieur La Doulaise', cursive;
+            --font-body: 'Bodoni Moda', serif;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            cursor: none;
+        }
+
+        body {
+            font-family: var(--font-body);
+            color: var(--text-main);
+            overflow-x: hidden;
+            background-color: var(--bg-pinstripe-1);
+        }
+
+        /* --- CUSTOM CURSOR --- */
+        #cursor {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 15px;
+            height: 15px;
+            border: 1.5px solid #000;
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 9999;
+            transform: translate(-50%, -50%);
+            transition: width 0.3s, height 0.3s;
+        }
+
+        #cursor.hovered {
+            width: 40px;
+            height: 40px;
+            background-color: transparent;
+            border: 1px solid #000;
+        }
+
+        @media (max-width: 768px) {
+            #cursor {
+                display: none;
+            }
+
+            * {
+                cursor: auto;
+            }
+        }
+
+        /* --- LAYOUT --- */
+        .container {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* --- SIDEBAR NAV --- */
+        nav {
+            width: 250px;
+            padding: 4rem 2rem;
+            position: fixed;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            z-index: 150;
+        }
+
+        .logo {
+            font-family: var(--font-body);
+            text-transform: uppercase;
+            font-size: 1.8rem;
+            letter-spacing: 2px;
+            font-weight: 700;
+        }
+
+        .menu-items {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            margin-top: 3rem;
+        }
+
+        .nav-link {
+            display: block;
+            font-family: var(--font-hand);
+            font-size: 2rem;
+            text-decoration: none;
+            color: var(--text-main);
+            transition: transform 0.3s ease;
+        }
+
+        .nav-link:hover {
+            transform: translateX(10px);
+        }
+
+        /* --- CONTENT --- */
+        main {
+            margin-left: 250px;
+            width: calc(100% - 250px);
+            padding: 8rem 4rem;
+            max-width: 1200px;
+        }
+
+        .about-section {
+            margin-bottom: 6rem;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeUp 1s ease forwards;
+        }
+
+        /* Bio Layout */
+        .bio-container {
+            display: flex;
+            gap: 4rem;
+            align-items: flex-start;
+        }
+
+        .bio-text {
+            flex: 1;
+        }
+
+        .bio-image {
+            width: 300px;
+            flex-shrink: 0;
+        }
+
+        .bio-image img {
+            width: 100%;
+            height: auto;
+            border-radius: 2px;
+            display: block;
+        }
+
+        @media (max-width: 900px) {
+            .bio-container {
+                flex-direction: column-reverse;
+                gap: 2rem;
+            }
+
+            .bio-image {
+                width: 100%;
+                max-width: 300px;
+                margin: 0 auto;
+            }
+        }
+
+        .about-section:nth-child(2) {
+            animation-delay: 0.3s;
+        }
+
+        h1 {
+            font-family: var(--font-hand);
+            font-size: 4rem;
+            margin-bottom: 2rem;
+            font-weight: 400;
+        }
+
+        h2 {
+            font-family: var(--font-body);
+            font-size: 1.2rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 1.5rem;
+            border-bottom: 1px solid #000;
+            padding-bottom: 10px;
+            display: inline-block;
+        }
+
+        p {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            margin-bottom: 1.5rem;
+            max-width: 800px;
+        }
+
+        @keyframes fadeUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* --- MOBILE HEADER & NAV --- */
+        #mobile-header {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            padding: 20px;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 200;
+            background: var(--bg-pinstripe-1);
+        }
+
+        .mobile-logo {
+            font-family: var(--font-body);
+            text-transform: uppercase;
+            font-weight: 700;
+            font-size: 1.2rem;
+            letter-spacing: 1px;
+        }
+
+        .menu-toggle,
+        .close-menu-btn {
+            font-family: var(--font-body);
+            cursor: pointer;
+        }
+
+        .close-menu-btn {
+            display: none;
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            font-size: 1.5rem;
+            padding: 10px;
+        }
+
+        @media (max-width: 768px) {
+            #mobile-header {
+                display: flex;
+            }
+
+            .container {
+                flex-direction: column;
+            }
+
+            nav {
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100vw;
+                height: 100vh;
+                background: var(--bg-pinstripe-1);
+                transform: translateX(100%);
+                padding: 6rem 2rem;
+                align-items: center;
+                text-align: center;
+                transition: transform 0.4s ease;
+            }
+
+            nav.open {
+                transform: translateX(0);
+            }
+
+            nav .logo {
+                display: none;
+            }
+
+            .close-menu-btn {
+                display: block;
+            }
+
+            main {
+                margin-left: 0;
+                width: 100%;
+                padding: 6rem 2rem;
+            }
+
+            h1 {
+                font-size: 3rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div id="cursor"></div>
+
+    <!-- Mobile Header -->
+    <div id="mobile-header">
+        <div class="mobile-logo">ESMERALDA</div>
+        <div class="menu-toggle" id="menu-toggle">Menu</div>
+    </div>
+
+    <div class="container">
+        <nav id="main-nav">
+            <div class="close-menu-btn" id="close-menu-btn">✕</div>
+            <div class="logo">ESMERALDA</div>
+
+            <div class="menu-items">
+                <div><a href="index.html" class="nav-link">Works</a></div>
+                <div><a href="about.html" class="nav-link" style="margin-left: 10px;">About</a></div>
+                <div><a href="#" class="nav-link">Contact</a></div>
+            </div>
+        </nav>
+
+        <main>
+            <div class="about-section bio-container">
+                <div class="bio-text">
+                    <h1>Bio</h1>
+                    <p>Esmé Belle, (Esmeralda Hernandez), is a multidisciplinary artist born and raised in Long Island, New
+                        York. Her work merges mundane moments captured from the countries she’s traveled to, into
+                        surrealistic paintings, drawings, photography, film, animation, and ceramic sculptures.</p>
+                    <p>Esmé has exhibited across New York, including the Student Art Show at Suffolk County Community
+                        College, Best of SUNY art exhibition (Albany, NY), and Abstract Arrangement Multi Media Showcase
+                        (Brooklyn, NY).</p>
+                    <p>Esmé has also done over a dozen promotional short films for fashion, beauty, and perfume brands such
+                        as Gap, Versace, Prada Beauty, Givenchy, and Moschino. Her practice reflects a deep connection to
+                        her Salvadoran heritage and the everyday poetry found in domestic life, using art as a bridge
+                        between personal narrative and collective experience.</p>
+                </div>
+                <div class="bio-image">
+                    <img src="assets/elements/esme_about.png" alt="Esmé Belle">
+                </div>
+            </div>
+
+            <div class="about-section">
+                <h1>Artist Statement</h1>
+                <p>Before I ever called myself an artist, I was a kid hunched over the kitchen table, turning glitter,
+                    tape, and old photos into gifts that meant more than anything I could buy. I think that’s still what
+                    drives me today, turning ordinary moments into something people can feel, something that quietly
+                    says, I see you.</p>
+                <p>A lot of my work circles back to memory, the kind you don’t even realize you’re carrying. The colors
+                    and patterns from my Salvadoran household, the smell of food during late-night painting sessions,
+                    the way a single photograph can unlock an entire history. Hands appear in my work again and again,
+                    maybe because they’re the first thing I notice about people, or because so much of our lives depends
+                    on what we hold and what we let go.</p>
+                <p>Self-portraiture has become another thread in my practice; partly because I’m always available as a
+                    subject, but mostly because studying myself becomes a way of confronting emotions I would otherwise
+                    avoid.</p>
+                <p>My art spans oil painting, charcoal drawing, ceramics, animation, and mixed media, but the story
+                    always comes first. Whether I’m painting on a salvaged blanket, building a ceramic planter layered
+                    with graffiti motifs, or reconstructing memories through charcoal, each piece begins with a small
+                    personal truth before expanding into something shared. I want people to feel calm, even cozy, when
+                    they look at my work, as if they’ve stepped into a familiar memory or a fever dream they
+                    half-remember.</p>
+                <p>If my work says anything about me, I hope it reflects how deeply I value the people I come from, the
+                    places that shaped me, and the stories that keep pulling me back to create again.</p>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // --- CURSOR ---
+        const cursor = document.getElementById('cursor');
+        document.addEventListener('mousemove', (e) => {
+            cursor.style.left = e.clientX + 'px';
+            cursor.style.top = e.clientY + 'px';
+        });
+
+        document.querySelectorAll('a').forEach(el => {
+            el.addEventListener('mouseenter', () => cursor.classList.add('hovered'));
+            el.addEventListener('mouseleave', () => cursor.classList.remove('hovered'));
+        });
+
+        // --- NAVIGATION ---
+        const mainNav = document.getElementById('main-nav');
+        const menuToggle = document.getElementById('menu-toggle');
+        const closeMenuBtn = document.getElementById('close-menu-btn');
+
+        menuToggle.addEventListener('click', () => {
+            mainNav.classList.add('open');
+        });
+
+        closeMenuBtn.addEventListener('click', () => {
+            mainNav.classList.remove('open');
+        });
+    </script>
+</body>
+
+</html>
