@@ -186,49 +186,14 @@
 
         @media (max-width: 768px) {
 
-            /* Mobile */
-            .cutout-wrapper-esme {
-                width: 45vw;
-                max-width: 180px;
-                left: -20px;
-                bottom: -10px;
-            }
-
-            .cutout-wrapper-moto {
-                width: 35vw;
-                max-width: 140px;
-                left: 30vw;
-                bottom: -10px;
-            }
-
-            /* Adjust others for mobile */
-            .cutout-wrapper-redman {
-                width: 25vw;
-                max-width: 120px;
-                right: -10px;
-                bottom: 80px;
-                /* clear bottom nav area if needed, or just sits there */
-            }
-
-            .cutout-wrapper-chess {
-                width: 20vw;
-                top: 120px;
-                /* clear header */
-                left: -10px;
-            }
-
-            .cutout-wrapper-mug1 {
-                width: 18vw;
-                top: 90px;
-                right: 10px;
-            }
-
+            /* Hide all decorative PNGs on mobile */
+            .cutout-wrapper-esme,
+            .cutout-wrapper-moto,
+            .cutout-wrapper-redman,
+            .cutout-wrapper-chess,
+            .cutout-wrapper-mug1,
             .cutout-wrapper-mug2 {
                 display: none;
-                /* Hide one mug on mobile to reduce clutter? Or keep small */
-                width: 20vw;
-                top: 140px;
-                right: -10px;
             }
         }
 
@@ -392,11 +357,6 @@
             /* Force align */
         }
 
-        /* Helper for optical alignment of 'Works' */
-        .menu-items>div:first-child .nav-link {
-            padding-left: 5px;
-        }
-
         /* Ensure all direct children divs align */
         .menu-items>div {
             padding-left: 0;
@@ -405,7 +365,7 @@
 
         .nav-link {
             display: block;
-            font-family: var(--font-hand);
+            font-family: var(--font-body);
             font-size: 2rem;
             text-decoration: none;
             color: var(--text-main);
@@ -730,6 +690,7 @@
 
         #progress-dots {
             display: flex;
+            flex-wrap: wrap;
             gap: 8px;
         }
 
@@ -751,6 +712,7 @@
         @media (max-width: 768px) {
             #mobile-header {
                 display: flex;
+                position: relative;
             }
 
             .container {
@@ -785,8 +747,6 @@
             main {
                 margin-left: 0;
                 width: 100%;
-                padding-top: 60px;
-                /* Space for header */
             }
 
             .art-card {
@@ -1015,7 +975,7 @@
                     <a href="about.html" class="nav-link">About</a>
                 </div>
                 <div>
-                    <a href="#" class="nav-link">Contact</a>
+                    <a href="#" class="nav-link">Instagram</a>
                 </div>
             </div>
 
