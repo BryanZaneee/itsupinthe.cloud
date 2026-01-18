@@ -115,7 +115,7 @@
             display: block;
             width: 100%;
             height: auto;
-            filter: drop-shadow(0 10px 20px rgba(0, 0, 0, 0.15));
+            filter: grayscale(100%) contrast(1.1) brightness(1.05) drop-shadow(0 10px 20px rgba(0, 0, 0, 0.15));
             /* Transition rotation if needed, currently static per class */
         }
 
@@ -1230,7 +1230,7 @@
 
             // --- 3D-ART ---
             { images: ['assets/images/maximus1.jpg', 'assets/images/maximus2.jpg'], type: '3d-art', title: 'Maximus', medium: 'Soft Sculpture Reconstructed Plush', size: '12" x 7" x 4"' },
-            { images: ['assets/images/concrete_planter_collection.JPG', 'assets/images/concrete_planter.jpeg', 'assets/images/concrete_planter2.jpeg', 'assets/images/concrete_planter3.jpeg', 'assets/images/concrete_planter4.jpeg'], type: '3d-art', title: 'Concrete Jungle Planter', medium: 'Ceramic', size: '10" x 10" x 10"' },
+            { images: ['assets/images/concrete_planter4.jpeg', 'assets/images/concrete_planter.jpeg', 'assets/images/concrete_planter2.jpeg', 'assets/images/concrete_planter3.jpeg'], type: '3d-art', title: 'Concrete Jungle Planter', medium: 'Ceramic', size: '10" x 10" x 10"' },
             { images: ['assets/images/queens_gambit_collection.jpg', 'assets/images/queens_gambit_piece.jpg'], type: '3d-art', title: "Queen's Gambit", medium: 'Ceramic', size: '24" x 7" x 5-6"' },
             { images: ['assets/images/ines_tribute_collection.JPG', 'assets/images/ines_tribute_portrait.jpg', 'assets/images/ines_tribute_mug1.jpg', 'assets/images/ines_tribute_mug1_top.jpg', 'assets/images/ines_tribute_mug2.jpg', 'assets/images/ines_tribute_mug3.jpg', 'assets/images/ines_tribute_mug3_top.jpg', 'assets/images/ines_tribute_mug4.jpg', 'assets/images/ines_tribute_mug4_top.jpg', 'assets/images/ines_tribute_mug5.jpg'], type: '3d-art', title: 'Café y Raíces: A Tribute to Ines', medium: 'Ceramic', size: 'Portrait: 12"x7"x1", Mugs: 4-4.5"x3-4"' },
             // { src: 'assets/images/stoned.jpg', type: '3d-art', title: 'Stoned', medium: 'Ceramic', size: '12" x 14" x 8"' },
@@ -1502,26 +1502,19 @@
                     parent.classList.toggle('open');
                     // Also filter to all
                     renderArtworks('all');
-                    window.scrollTo({ top: 0, behavior: 'smooth' });
                 }
             });
         });
 
         // Click-based expansion for category headers (Paintings, Drawings, 3D-Art)
+        // Only toggles submenu - does not filter or scroll
         document.querySelectorAll('.category-header').forEach(header => {
             header.addEventListener('click', (e) => {
                 e.preventDefault();
                 e.stopPropagation();
 
-                // Toggle open state for sub-sub-menu
+                // Toggle open state for sub-sub-menu only
                 header.classList.toggle('open');
-
-                // Also filter by this category type
-                const filterType = header.dataset.filter;
-                if (filterType) {
-                    renderArtworks(filterType);
-                    window.scrollTo({ top: 0, behavior: 'smooth' });
-                }
             });
         });
 
@@ -1533,7 +1526,6 @@
                 const medium = link.dataset.medium;
 
                 renderArtworksByMedium(filterType, medium);
-                window.scrollTo({ top: 0, behavior: 'smooth' });
 
                 // Close mobile menu
                 mainNav.classList.remove('open');
@@ -1549,7 +1541,6 @@
                 const collection = link.dataset.collection;
 
                 renderArtworksByCollection(collection);
-                window.scrollTo({ top: 0, behavior: 'smooth' });
 
                 // Close mobile menu
                 mainNav.classList.remove('open');
