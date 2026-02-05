@@ -1156,6 +1156,44 @@
             }
         }
 
+        /* Motorcycle Overlay */
+        .hero-motorcycle {
+            position: absolute;
+            top: 68.8%;
+            left: 24%;
+            width: 59%;
+            pointer-events: none;
+            z-index: 3;
+            animation: motorcycle-vibrate 0.08s linear infinite;
+        }
+
+        .hero-motorcycle img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        @keyframes motorcycle-vibrate {
+            0%, 100% {
+                transform: translate(0, 0) rotate(0deg);
+            }
+            25% {
+                transform: translate(0.5px, -0.5px) rotate(0.1deg);
+            }
+            50% {
+                transform: translate(-0.5px, 0.5px) rotate(-0.1deg);
+            }
+            75% {
+                transform: translate(0.5px, 0.5px) rotate(0.1deg);
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .hero-motorcycle {
+                animation: none;
+            }
+        }
+
         .hero-signature {
             position: absolute;
             top: 38%;
@@ -1197,6 +1235,11 @@
         <div class="hero-sparkle">
             <div class="sparkle"></div>
             <div class="sparkle-diagonal"></div>
+        </div>
+
+        <!-- Motorcycle Overlay -->
+        <div class="hero-motorcycle">
+            <img src="assets/motorcycle/motorcycle.png" alt="" />
         </div>
 
         <div class="hero-signature">
@@ -1280,6 +1323,45 @@
             <div style="background: #333; padding: 8px; border-radius: 4px; margin-top: 10px;">
                 <div style="font-size: 10px; color: #aaa; margin-bottom: 4px;">Copy these values:</div>
                 <code id="sparkle-values" style="font-size: 11px; color: #4fc3f7;">top: 47.1%; left: 55.3%; width: 40px;</code>
+            </div>
+        </div>
+
+        <!-- Motorcycle Position Controls -->
+        <div style="border-top: 1px solid #555; margin-top: 12px; padding-top: 12px;">
+            <div style="margin-bottom: 10px; font-weight: bold;">Motorcycle Position</div>
+            <div style="margin-bottom: 8px;">
+                <div style="display: flex; align-items: center; gap: 6px; margin-bottom: 3px;">
+                    <label style="flex: 1;">Top: <span id="moto-top-val">68.8</span>%</label>
+                    <button class="adj-btn" data-target="moto-top" data-delta="-1">−1</button>
+                    <button class="adj-btn" data-target="moto-top" data-delta="-0.1">−.1</button>
+                    <button class="adj-btn" data-target="moto-top" data-delta="0.1">+.1</button>
+                    <button class="adj-btn" data-target="moto-top" data-delta="1">+1</button>
+                </div>
+                <input type="range" id="moto-top" min="0" max="100" step="0.1" value="68.8" style="width: 100%;">
+            </div>
+            <div style="margin-bottom: 8px;">
+                <div style="display: flex; align-items: center; gap: 6px; margin-bottom: 3px;">
+                    <label style="flex: 1;">Left: <span id="moto-left-val">24</span>%</label>
+                    <button class="adj-btn" data-target="moto-left" data-delta="-1">−1</button>
+                    <button class="adj-btn" data-target="moto-left" data-delta="-0.1">−.1</button>
+                    <button class="adj-btn" data-target="moto-left" data-delta="0.1">+.1</button>
+                    <button class="adj-btn" data-target="moto-left" data-delta="1">+1</button>
+                </div>
+                <input type="range" id="moto-left" min="0" max="100" step="0.1" value="24" style="width: 100%;">
+            </div>
+            <div style="margin-bottom: 8px;">
+                <div style="display: flex; align-items: center; gap: 6px; margin-bottom: 3px;">
+                    <label style="flex: 1;">Width: <span id="moto-width-val">59</span>%</label>
+                    <button class="adj-btn" data-target="moto-width" data-delta="-1">−1</button>
+                    <button class="adj-btn" data-target="moto-width" data-delta="-0.1">−.1</button>
+                    <button class="adj-btn" data-target="moto-width" data-delta="0.1">+.1</button>
+                    <button class="adj-btn" data-target="moto-width" data-delta="1">+1</button>
+                </div>
+                <input type="range" id="moto-width" min="5" max="100" step="0.1" value="59" style="width: 100%;">
+            </div>
+            <div style="background: #333; padding: 8px; border-radius: 4px; margin-top: 10px;">
+                <div style="font-size: 10px; color: #aaa; margin-bottom: 4px;">Copy these values:</div>
+                <code id="moto-values" style="font-size: 11px; color: #4fc3f7;">top: 68.8%; left: 24%; width: 59%;</code>
             </div>
         </div>
         </div>
@@ -1445,6 +1527,35 @@
             sparkleLeft.addEventListener('input', updateSparkle);
             sparkleSize.addEventListener('input', updateSparkle);
 
+            // Motorcycle position controls
+            const motorcycle = document.querySelector('.hero-motorcycle');
+            const motoTop = document.getElementById('moto-top');
+            const motoLeft = document.getElementById('moto-left');
+            const motoWidth = document.getElementById('moto-width');
+            const motoTopVal = document.getElementById('moto-top-val');
+            const motoLeftVal = document.getElementById('moto-left-val');
+            const motoWidthVal = document.getElementById('moto-width-val');
+            const motoValues = document.getElementById('moto-values');
+
+            function updateMotorcycle() {
+                const top = motoTop.value;
+                const left = motoLeft.value;
+                const width = motoWidth.value;
+
+                motorcycle.style.top = top + '%';
+                motorcycle.style.left = left + '%';
+                motorcycle.style.width = width + '%';
+
+                motoTopVal.textContent = top;
+                motoLeftVal.textContent = left;
+                motoWidthVal.textContent = width;
+                motoValues.textContent = `top: ${top}%; left: ${left}%; width: ${width}%;`;
+            }
+
+            motoTop.addEventListener('input', updateMotorcycle);
+            motoLeft.addEventListener('input', updateMotorcycle);
+            motoWidth.addEventListener('input', updateMotorcycle);
+
             // Adjustment buttons
             document.querySelectorAll('.adj-btn').forEach(btn => {
                 btn.addEventListener('click', () => {
@@ -1455,7 +1566,12 @@
                     let newVal = parseFloat(target.value) + delta;
                     newVal = Math.max(min, Math.min(max, newVal));
                     target.value = newVal;
-                    updateSparkle();
+                    // Update the appropriate element based on which control was adjusted
+                    if (btn.dataset.target.startsWith('sparkle')) {
+                        updateSparkle();
+                    } else if (btn.dataset.target.startsWith('moto')) {
+                        updateMotorcycle();
+                    }
                 });
             });
         })();
