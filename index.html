@@ -1059,6 +1059,103 @@
             }
         }
 
+        /* Earring Sparkle Effect */
+        .hero-sparkle {
+            position: absolute;
+            top: 47.1%;
+            left: 55.3%;
+            width: 40px;
+            height: 40px;
+            pointer-events: none;
+            z-index: 2;
+        }
+
+        .sparkle {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+        }
+
+        .sparkle::before,
+        .sparkle::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            background: white;
+            border-radius: 2px;
+        }
+
+        /* Vertical beam */
+        .sparkle::before {
+            width: 3px;
+            height: 100%;
+            transform: translate(-50%, -50%);
+            box-shadow: 0 0 8px 2px rgba(255, 255, 255, 0.8),
+                        0 0 15px 4px rgba(255, 255, 255, 0.4);
+        }
+
+        /* Horizontal beam */
+        .sparkle::after {
+            width: 100%;
+            height: 3px;
+            transform: translate(-50%, -50%);
+            box-shadow: 0 0 8px 2px rgba(255, 255, 255, 0.8),
+                        0 0 15px 4px rgba(255, 255, 255, 0.4);
+        }
+
+        /* Diagonal sparkle arms */
+        .sparkle-diagonal {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+        }
+
+        .sparkle-diagonal::before,
+        .sparkle-diagonal::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            background: white;
+            border-radius: 2px;
+            width: 70%;
+            height: 2px;
+            box-shadow: 0 0 6px 1px rgba(255, 255, 255, 0.6),
+                        0 0 12px 3px rgba(255, 255, 255, 0.3);
+        }
+
+        .sparkle-diagonal::before {
+            transform: translate(-50%, -50%) rotate(45deg);
+        }
+
+        .sparkle-diagonal::after {
+            transform: translate(-50%, -50%) rotate(-45deg);
+        }
+
+        /* Sparkle animation */
+        .hero-sparkle {
+            animation: sparkle-pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes sparkle-pulse {
+            0%, 100% {
+                opacity: 0.9;
+                transform: scale(1);
+            }
+            50% {
+                opacity: 0.5;
+                transform: scale(0.8);
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .hero-sparkle {
+                animation: none;
+                opacity: 0.8;
+            }
+        }
+
         .hero-signature {
             position: absolute;
             top: 38%;
@@ -1096,6 +1193,12 @@
             <img src="assets/esme-blink/esme-f3.png" class="eye-frame eye-closed" alt="" />
         </div>
 
+        <!-- Earring Sparkle -->
+        <div class="hero-sparkle">
+            <div class="sparkle"></div>
+            <div class="sparkle-diagonal"></div>
+        </div>
+
         <div class="hero-signature">
             <svg class="signature-svg hero-signature-svg" xmlns="http://www.w3.org/2000/svg"
                 viewBox="0 0 528.54 229.25" preserveAspectRatio="xMidYMid meet">
@@ -1120,8 +1223,12 @@
     </section>
 
     <!-- DEBUG: Animation Frame Scrubber - Remove after testing -->
-    <div id="frame-controls" style="position: fixed; top: 10px; right: 10px; background: rgba(0,0,0,0.9); padding: 15px; border-radius: 8px; z-index: 9999; color: white; font-family: monospace; font-size: 12px; min-width: 200px;">
-        <div style="margin-bottom: 10px; font-weight: bold;">Animation Frame Scrubber</div>
+    <div id="frame-controls" style="position: fixed; top: 10px; right: 10px; background: rgba(0,0,0,0.9); padding: 15px; border-radius: 8px; z-index: 9999; color: white; font-family: monospace; font-size: 12px; min-width: 220px;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+            <span style="font-weight: bold;">Debug Controls</span>
+            <button id="minimize-btn" style="background: #4a4a4a; color: white; border: none; border-radius: 3px; width: 24px; height: 24px; cursor: pointer; font-size: 16px; line-height: 1;">−</button>
+        </div>
+        <div id="controls-content">
         <div style="margin-bottom: 12px;">
             <label>Frame: <span id="frame-label">Open (f1)</span></label><br>
             <input type="range" id="frame-slider" min="0" max="4" step="1" value="0" style="width: 100%; margin-top: 5px;">
@@ -1136,6 +1243,61 @@
         <div style="border-top: 1px solid #555; padding-top: 10px;">
             <button id="play-cycle" style="width: 100%; padding: 8px; background: #4a4a4a; color: white; border: none; border-radius: 4px; cursor: pointer;">Play Blink Cycle</button>
         </div>
+
+        <!-- Sparkle Position Controls -->
+        <div style="border-top: 1px solid #555; margin-top: 12px; padding-top: 12px;">
+            <div style="margin-bottom: 10px; font-weight: bold;">Sparkle Position</div>
+            <div style="margin-bottom: 8px;">
+                <div style="display: flex; align-items: center; gap: 6px; margin-bottom: 3px;">
+                    <label style="flex: 1;">Top: <span id="sparkle-top-val">47.1</span>%</label>
+                    <button class="adj-btn" data-target="sparkle-top" data-delta="-1">−1</button>
+                    <button class="adj-btn" data-target="sparkle-top" data-delta="-0.1">−.1</button>
+                    <button class="adj-btn" data-target="sparkle-top" data-delta="0.1">+.1</button>
+                    <button class="adj-btn" data-target="sparkle-top" data-delta="1">+1</button>
+                </div>
+                <input type="range" id="sparkle-top" min="0" max="100" step="0.1" value="47.1" style="width: 100%;">
+            </div>
+            <div style="margin-bottom: 8px;">
+                <div style="display: flex; align-items: center; gap: 6px; margin-bottom: 3px;">
+                    <label style="flex: 1;">Left: <span id="sparkle-left-val">55.3</span>%</label>
+                    <button class="adj-btn" data-target="sparkle-left" data-delta="-1">−1</button>
+                    <button class="adj-btn" data-target="sparkle-left" data-delta="-0.1">−.1</button>
+                    <button class="adj-btn" data-target="sparkle-left" data-delta="0.1">+.1</button>
+                    <button class="adj-btn" data-target="sparkle-left" data-delta="1">+1</button>
+                </div>
+                <input type="range" id="sparkle-left" min="0" max="100" step="0.1" value="55.3" style="width: 100%;">
+            </div>
+            <div style="margin-bottom: 8px;">
+                <div style="display: flex; align-items: center; gap: 6px; margin-bottom: 3px;">
+                    <label style="flex: 1;">Size: <span id="sparkle-size-val">40</span>px</label>
+                    <button class="adj-btn" data-target="sparkle-size" data-delta="-5">−5</button>
+                    <button class="adj-btn" data-target="sparkle-size" data-delta="-1">−1</button>
+                    <button class="adj-btn" data-target="sparkle-size" data-delta="1">+1</button>
+                    <button class="adj-btn" data-target="sparkle-size" data-delta="5">+5</button>
+                </div>
+                <input type="range" id="sparkle-size" min="10" max="150" step="1" value="40" style="width: 100%;">
+            </div>
+            <div style="background: #333; padding: 8px; border-radius: 4px; margin-top: 10px;">
+                <div style="font-size: 10px; color: #aaa; margin-bottom: 4px;">Copy these values:</div>
+                <code id="sparkle-values" style="font-size: 11px; color: #4fc3f7;">top: 47.1%; left: 55.3%; width: 40px;</code>
+            </div>
+        </div>
+        </div>
+        <style>
+            .adj-btn {
+                padding: 2px 6px;
+                background: #4a4a4a;
+                color: white;
+                border: none;
+                border-radius: 3px;
+                cursor: pointer;
+                font-size: 10px;
+                font-family: monospace;
+            }
+            .adj-btn:hover {
+                background: #666;
+            }
+        </style>
     </div>
     <script>
         (function() {
@@ -1145,6 +1307,16 @@
             const frameSlider = document.getElementById('frame-slider');
             const frameLabel = document.getElementById('frame-label');
             const playBtn = document.getElementById('play-cycle');
+            const minimizeBtn = document.getElementById('minimize-btn');
+            const controlsContent = document.getElementById('controls-content');
+
+            // Minimize toggle
+            let minimized = false;
+            minimizeBtn.addEventListener('click', () => {
+                minimized = !minimized;
+                controlsContent.style.display = minimized ? 'none' : 'block';
+                minimizeBtn.textContent = minimized ? '+' : '−';
+            });
 
             // Remove CSS animations to allow JS control of opacity
             [eyeOpen, eyeHalf, eyeClosed].forEach(el => {
@@ -1165,34 +1337,127 @@
                 eyeHalf.style.opacity = frame.half;
                 eyeClosed.style.opacity = frame.closed;
                 frameLabel.textContent = frame.label;
+                frameSlider.value = index;
             }
 
             frameSlider.addEventListener('input', () => {
+                // Stop auto-play when user manually scrubs
+                if (autoPlaying) {
+                    stopAutoPlay();
+                }
                 setFrame(parseInt(frameSlider.value));
             });
 
-            let playing = false;
-            let playInterval = null;
+            // Auto-play blink cycle
+            let autoPlaying = true;
+            let autoPlayCancelled = false;
+
+            function sleep(ms) {
+                return new Promise(resolve => setTimeout(resolve, ms));
+            }
+
+            async function doBlink() {
+                const blinkSequence = [0, 1, 2, 1, 0]; // open→half→closed→half→open
+                for (const frameIdx of blinkSequence) {
+                    if (autoPlayCancelled) return;
+                    setFrame(frameIdx);
+                    await sleep(75);
+                }
+            }
+
+            async function runBlinkCycle() {
+                while (!autoPlayCancelled) {
+                    // 4 seconds open
+                    setFrame(0);
+                    await sleep(4000);
+                    if (autoPlayCancelled) return;
+
+                    // Double blink
+                    await doBlink();
+                    if (autoPlayCancelled) return;
+                    await sleep(100); // small gap between blinks
+                    await doBlink();
+                    if (autoPlayCancelled) return;
+
+                    // 3 seconds open
+                    setFrame(0);
+                    await sleep(3000);
+                    if (autoPlayCancelled) return;
+
+                    // Single blink
+                    await doBlink();
+                }
+            }
+
+            function stopAutoPlay() {
+                autoPlaying = false;
+                autoPlayCancelled = true;
+                playBtn.textContent = 'Start Auto Blink';
+            }
+
+            function startAutoPlay() {
+                autoPlaying = true;
+                autoPlayCancelled = false;
+                playBtn.textContent = 'Stop Auto Blink';
+                runBlinkCycle();
+            }
 
             playBtn.addEventListener('click', () => {
-                if (playing) {
-                    clearInterval(playInterval);
-                    playBtn.textContent = 'Play Blink Cycle';
-                    playing = false;
+                if (autoPlaying) {
+                    stopAutoPlay();
                 } else {
-                    playing = true;
-                    playBtn.textContent = 'Stop';
-                    let frame = 0;
-                    playInterval = setInterval(() => {
-                        frameSlider.value = frame;
-                        setFrame(frame);
-                        frame = (frame + 1) % 5;
-                    }, 150);
+                    startAutoPlay();
                 }
             });
 
-            // Initialize to first frame
+            // Initialize and start auto-play
             setFrame(0);
+            playBtn.textContent = 'Stop Auto Blink';
+            runBlinkCycle();
+
+            // Sparkle position controls
+            const sparkle = document.querySelector('.hero-sparkle');
+            const sparkleTop = document.getElementById('sparkle-top');
+            const sparkleLeft = document.getElementById('sparkle-left');
+            const sparkleSize = document.getElementById('sparkle-size');
+            const sparkleTopVal = document.getElementById('sparkle-top-val');
+            const sparkleLeftVal = document.getElementById('sparkle-left-val');
+            const sparkleSizeVal = document.getElementById('sparkle-size-val');
+            const sparkleValues = document.getElementById('sparkle-values');
+
+            function updateSparkle() {
+                const top = sparkleTop.value;
+                const left = sparkleLeft.value;
+                const size = sparkleSize.value;
+
+                sparkle.style.top = top + '%';
+                sparkle.style.left = left + '%';
+                sparkle.style.width = size + 'px';
+                sparkle.style.height = size + 'px';
+
+                sparkleTopVal.textContent = top;
+                sparkleLeftVal.textContent = left;
+                sparkleSizeVal.textContent = size;
+                sparkleValues.textContent = `top: ${top}%; left: ${left}%; width: ${size}px;`;
+            }
+
+            sparkleTop.addEventListener('input', updateSparkle);
+            sparkleLeft.addEventListener('input', updateSparkle);
+            sparkleSize.addEventListener('input', updateSparkle);
+
+            // Adjustment buttons
+            document.querySelectorAll('.adj-btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const target = document.getElementById(btn.dataset.target);
+                    const delta = parseFloat(btn.dataset.delta);
+                    const min = parseFloat(target.min);
+                    const max = parseFloat(target.max);
+                    let newVal = parseFloat(target.value) + delta;
+                    newVal = Math.max(min, Math.min(max, newVal));
+                    target.value = newVal;
+                    updateSparkle();
+                });
+            });
         })();
     </script>
 
