@@ -991,9 +991,77 @@
             display: block;
         }
 
+        /* Eye Blink Animation */
+        .hero-eyes {
+            position: absolute;
+            top: 27%;
+            left: -1%;
+            width: 100%;
+            pointer-events: none;
+            z-index: 1;
+            transform: rotate(-90deg) scale(1.15);
+            transform-origin: center center;
+        }
+
+        .eye-frame {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: auto;
+        }
+
+        .eye-frame:first-child {
+            position: relative; /* First image sets container height */
+        }
+
+        .eye-open {
+            opacity: 1; /* Base state - always visible except during blink */
+            animation: blink-open 5s infinite;
+        }
+
+        .eye-half {
+            opacity: 0;
+            animation: blink-half 5s infinite;
+        }
+
+        .eye-closed {
+            opacity: 0;
+            animation: blink-closed 5s infinite;
+        }
+
+        /* Blink animation: eyes open most of the time, quick blink at 90-96% and 97-99% */
+        @keyframes blink-open {
+            0%, 90%, 96%, 97%, 99%, 100% { opacity: 1; }
+            91%, 95%, 98% { opacity: 0; }
+        }
+
+        @keyframes blink-half {
+            0%, 90%, 92%, 96%, 97%, 99%, 100% { opacity: 0; }
+            91%, 95%, 98% { opacity: 1; }
+        }
+
+        @keyframes blink-closed {
+            0%, 91%, 95%, 98%, 100% { opacity: 0; }
+            92%, 94% { opacity: 1; }
+        }
+
+        /* Respect reduced motion preference */
+        @media (prefers-reduced-motion: reduce) {
+            .eye-open {
+                animation: none;
+                opacity: 1;
+            }
+            .eye-half,
+            .eye-closed {
+                animation: none;
+                opacity: 0;
+            }
+        }
+
         .hero-signature {
             position: absolute;
-            top: 50%;
+            top: 38%;
             left: 50%;
             transform: translate(-50%, -50%);
             pointer-events: none;
@@ -1020,6 +1088,14 @@
     <section id="hero">
         <img src="assets/images/thailand_days_portrait.JPG" alt="Thailand Days - Oil on Birchwood"
             class="hero-image" />
+
+        <!-- Eye Blink Animation Layer -->
+        <div class="hero-eyes">
+            <img src="assets/esme-blink/esme-f1.png" class="eye-frame eye-open" alt="" />
+            <img src="assets/esme-blink/esme-eyes2.png" class="eye-frame eye-half" alt="" />
+            <img src="assets/esme-blink/esme-eyes-3.png" class="eye-frame eye-closed" alt="" />
+        </div>
+
         <div class="hero-signature">
             <svg class="signature-svg hero-signature-svg" xmlns="http://www.w3.org/2000/svg"
                 viewBox="0 0 528.54 229.25" preserveAspectRatio="xMidYMid meet">
