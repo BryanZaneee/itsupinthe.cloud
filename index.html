@@ -1084,49 +1084,76 @@
         /* Earring Sparkle Effect */
         .hero-sparkle {
             position: absolute;
-            top: 47.1%;
-            left: 55.3%;
-            width: 40px;
-            height: 40px;
+            top: 46.1%;
+            left: 52.2%;
+            width: 55px;
+            height: 55px;
             pointer-events: none;
             z-index: 2;
         }
 
+        /* Bright center hotspot */
         .sparkle {
             position: absolute;
-            width: 100%;
-            height: 100%;
+            top: 50%;
+            left: 50%;
+            width: 6px;
+            height: 6px;
+            transform: translate(-50%, -50%);
+            background: radial-gradient(circle,
+                rgba(255, 255, 255, 1) 0%,
+                rgba(255, 253, 240, 0.9) 30%,
+                rgba(255, 248, 220, 0.3) 60%,
+                transparent 100%);
+            border-radius: 50%;
+            box-shadow:
+                0 0 3px 1px rgba(255, 255, 255, 0.9),
+                0 0 8px 3px rgba(255, 250, 230, 0.5),
+                0 0 16px 6px rgba(255, 248, 220, 0.2);
         }
 
+        /* Main light rays - vertical & horizontal, tapered */
         .sparkle::before,
         .sparkle::after {
             content: '';
             position: absolute;
             top: 50%;
             left: 50%;
-            background: white;
-            border-radius: 2px;
+            background: linear-gradient(to right,
+                transparent 0%,
+                rgba(255, 253, 245, 0.15) 20%,
+                rgba(255, 255, 255, 0.6) 45%,
+                rgba(255, 255, 255, 0.8) 50%,
+                rgba(255, 255, 255, 0.6) 55%,
+                rgba(255, 253, 245, 0.15) 80%,
+                transparent 100%);
         }
 
-        /* Vertical beam */
+        /* Vertical ray - taller, thinner */
         .sparkle::before {
-            width: 3px;
-            height: 100%;
+            width: 1.5px;
+            height: 500%;
             transform: translate(-50%, -50%);
-            box-shadow: 0 0 8px 2px rgba(255, 255, 255, 0.8),
-                        0 0 15px 4px rgba(255, 255, 255, 0.4);
+            background: linear-gradient(to bottom,
+                transparent 0%,
+                rgba(255, 253, 245, 0.1) 15%,
+                rgba(255, 255, 255, 0.5) 40%,
+                rgba(255, 255, 255, 0.8) 50%,
+                rgba(255, 255, 255, 0.5) 60%,
+                rgba(255, 253, 245, 0.1) 85%,
+                transparent 100%);
+            filter: blur(0.5px);
         }
 
-        /* Horizontal beam */
+        /* Horizontal ray - shorter */
         .sparkle::after {
-            width: 100%;
-            height: 3px;
+            width: 350%;
+            height: 1.5px;
             transform: translate(-50%, -50%);
-            box-shadow: 0 0 8px 2px rgba(255, 255, 255, 0.8),
-                        0 0 15px 4px rgba(255, 255, 255, 0.4);
+            filter: blur(0.5px);
         }
 
-        /* Diagonal sparkle arms */
+        /* Diagonal rays - shorter, more subtle */
         .sparkle-diagonal {
             position: absolute;
             width: 100%;
@@ -1139,36 +1166,40 @@
             position: absolute;
             top: 50%;
             left: 50%;
-            background: white;
-            border-radius: 2px;
-            width: 70%;
-            height: 2px;
-            box-shadow: 0 0 6px 1px rgba(255, 255, 255, 0.6),
-                        0 0 12px 3px rgba(255, 255, 255, 0.3);
+            width: 200%;
+            height: 1px;
+            background: linear-gradient(to right,
+                transparent 0%,
+                rgba(255, 253, 245, 0.08) 20%,
+                rgba(255, 255, 255, 0.35) 45%,
+                rgba(255, 255, 255, 0.5) 50%,
+                rgba(255, 255, 255, 0.35) 55%,
+                rgba(255, 253, 245, 0.08) 80%,
+                transparent 100%);
+            filter: blur(0.3px);
         }
 
         .sparkle-diagonal::before {
-            transform: translate(-50%, -50%) rotate(45deg);
+            transform: translate(-50%, -50%) rotate(40deg);
         }
 
         .sparkle-diagonal::after {
-            transform: translate(-50%, -50%) rotate(-45deg);
+            transform: translate(-50%, -50%) rotate(-35deg);
         }
 
-        /* Sparkle animation */
+        /* Sparkle animation - irregular flicker */
         .hero-sparkle {
-            animation: sparkle-pulse 2s ease-in-out infinite;
+            animation: sparkle-flicker 3s ease-in-out infinite;
         }
 
-        @keyframes sparkle-pulse {
-            0%, 100% {
-                opacity: 0.9;
-                transform: scale(1);
-            }
-            50% {
-                opacity: 0.5;
-                transform: scale(0.8);
-            }
+        @keyframes sparkle-flicker {
+            0%   { opacity: 0.85; transform: scale(1) rotate(0deg); }
+            15%  { opacity: 1; transform: scale(1.1) rotate(0.5deg); }
+            30%  { opacity: 0.6; transform: scale(0.85) rotate(-0.3deg); }
+            50%  { opacity: 0.9; transform: scale(1.05) rotate(0.2deg); }
+            70%  { opacity: 0.4; transform: scale(0.7) rotate(-0.5deg); }
+            85%  { opacity: 0.95; transform: scale(1.08) rotate(0.3deg); }
+            100% { opacity: 0.85; transform: scale(1) rotate(0deg); }
         }
 
         @media (prefers-reduced-motion: reduce) {
@@ -1210,9 +1241,52 @@
             }
         }
 
+        .exhaust-smoke {
+            position: absolute;
+            bottom: 15.5%;
+            right: 36.6%;
+            width: 14.5%;
+            height: 29%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .smoke-particle {
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            width: 38px;
+            height: 38px;
+            background: radial-gradient(circle,
+                rgba(200, 200, 210, 0.9) 0%,
+                rgba(200, 200, 210, 0.4) 40%,
+                transparent 70%);
+            border-radius: 50%;
+            filter: blur(4px);
+            opacity: 0;
+            will-change: transform, opacity;
+            animation: smoke-rise 3s ease-out infinite;
+        }
+
+        .smoke-particle:nth-child(2) { animation-delay: 0.5s; }
+        .smoke-particle:nth-child(3) { animation-delay: 1.0s; }
+        .smoke-particle:nth-child(4) { animation-delay: 1.5s; }
+        .smoke-particle:nth-child(5) { animation-delay: 2.0s; }
+        .smoke-particle:nth-child(6) { animation-delay: 2.5s; }
+
+        @keyframes smoke-rise {
+            0%   { opacity: 0; transform: translate(-50%, 0) scale(0.5); }
+            10%  { opacity: 1; }
+            50%  { opacity: 0.6; transform: translate(calc(-50% + 18px), -200px) scale(1.4); }
+            100% { opacity: 0; transform: translate(calc(-50% + 35px), -400px) scale(2.5); }
+        }
+
         @media (prefers-reduced-motion: reduce) {
             .hero-motorcycle {
                 animation: none;
+            }
+            .exhaust-smoke {
+                display: none;
             }
         }
 
@@ -1236,6 +1310,19 @@
             .hero-signature-svg {
                 height: 10rem;
             }
+            .smoke-particle {
+                width: 24px;
+                height: 24px;
+                filter: blur(4px);
+                animation: smoke-rise-mobile 3s ease-out infinite;
+            }
+        }
+
+        @keyframes smoke-rise-mobile {
+            0%   { opacity: 0; transform: translate(-50%, 0) scale(0.5); }
+            10%  { opacity: 1; }
+            50%  { opacity: 0.6; transform: translate(calc(-50% + 10px), -120px) scale(1.4); }
+            100% { opacity: 0; transform: translate(calc(-50% + 20px), -240px) scale(2.5); }
         }
     </style>
 </head>
@@ -1263,6 +1350,15 @@
         <!-- Motorcycle Overlay -->
         <div class="hero-motorcycle">
             <img src="assets/motorcycle/motorcycle.png" alt="" />
+            <!-- Exhaust Smoke -->
+            <div class="exhaust-smoke" aria-hidden="true">
+                <div class="smoke-particle"></div>
+                <div class="smoke-particle"></div>
+                <div class="smoke-particle"></div>
+                <div class="smoke-particle"></div>
+                <div class="smoke-particle"></div>
+                <div class="smoke-particle"></div>
+            </div>
         </div>
 
         <div class="hero-signature">
@@ -1289,7 +1385,7 @@
     </section>
 
     <!-- DEBUG: Animation Frame Scrubber - Remove after testing -->
-    <div id="frame-controls" style="position: fixed; bottom: 10px; left: 10px; background: rgba(0,0,0,0.9); padding: 15px; border-radius: 8px; z-index: 9999; color: white; font-family: monospace; font-size: 12px; min-width: 220px;">
+    <div id="frame-controls" style="display: none; position: fixed; bottom: 10px; left: 10px; background: rgba(0,0,0,0.9); padding: 15px; border-radius: 8px; z-index: 9999; color: white; font-family: monospace; font-size: 12px; min-width: 220px;">
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
             <span style="font-weight: bold;">Debug Controls</span>
             <button id="minimize-btn" style="background: #4a4a4a; color: white; border: none; border-radius: 3px; width: 24px; height: 24px; cursor: pointer; font-size: 16px; line-height: 1;">−</button>
@@ -1311,8 +1407,11 @@
         </div>
 
         <!-- Sparkle Position Controls -->
-        <div style="border-top: 1px solid #555; margin-top: 12px; padding-top: 12px;">
-            <div style="margin-bottom: 10px; font-weight: bold;">Sparkle Position</div>
+        <div style="border-top: 1px solid #555; margin-top: 12px; padding-top: 8px;">
+            <div class="debug-section-header" data-section="sparkle-section" style="display: flex; justify-content: space-between; align-items: center; cursor: pointer; font-weight: bold; margin-bottom: 4px;">
+                <span>Sparkle Position</span><span class="debug-chevron">+</span>
+            </div>
+            <div id="sparkle-section" style="display: none;">
             <div style="margin-bottom: 8px;">
                 <div style="display: flex; align-items: center; gap: 6px; margin-bottom: 3px;">
                     <label style="flex: 1;">Top: <span id="sparkle-top-val">47.1</span>%</label>
@@ -1347,11 +1446,15 @@
                 <div style="font-size: 10px; color: #aaa; margin-bottom: 4px;">Copy these values:</div>
                 <code id="sparkle-values" style="font-size: 11px; color: #4fc3f7;">top: 47.1%; left: 55.3%; width: 40px;</code>
             </div>
+            </div>
         </div>
 
         <!-- Motorcycle Position Controls -->
-        <div style="border-top: 1px solid #555; margin-top: 12px; padding-top: 12px;">
-            <div style="margin-bottom: 10px; font-weight: bold;">Motorcycle Position</div>
+        <div style="border-top: 1px solid #555; margin-top: 8px; padding-top: 8px;">
+            <div class="debug-section-header" data-section="moto-section" style="display: flex; justify-content: space-between; align-items: center; cursor: pointer; font-weight: bold; margin-bottom: 4px;">
+                <span>Motorcycle Position</span><span class="debug-chevron">+</span>
+            </div>
+            <div id="moto-section" style="display: none;">
             <div style="margin-bottom: 8px;">
                 <div style="display: flex; align-items: center; gap: 6px; margin-bottom: 3px;">
                     <label style="flex: 1;">Top: <span id="moto-top-val">68.8</span>%</label>
@@ -1386,6 +1489,80 @@
                 <div style="font-size: 10px; color: #aaa; margin-bottom: 4px;">Copy these values:</div>
                 <code id="moto-values" style="font-size: 11px; color: #4fc3f7;">top: 68.8%; left: 24%; width: 59%;</code>
             </div>
+            </div>
+        </div>
+
+        <!-- Smoke Position Controls -->
+        <div style="border-top: 1px solid #555; margin-top: 8px; padding-top: 8px;">
+            <div class="debug-section-header" data-section="smoke-section" style="display: flex; justify-content: space-between; align-items: center; cursor: pointer; font-weight: bold; margin-bottom: 4px;">
+                <span>Exhaust Smoke</span><span class="debug-chevron">+</span>
+            </div>
+            <div id="smoke-section" style="display: none;">
+            <div style="margin-bottom: 8px;">
+                <div style="display: flex; align-items: center; gap: 6px; margin-bottom: 3px;">
+                    <label style="flex: 1;">Bottom: <span id="smoke-bottom-val">15.5</span>%</label>
+                    <button class="adj-btn" data-target="smoke-bottom" data-delta="-1">−1</button>
+                    <button class="adj-btn" data-target="smoke-bottom" data-delta="-0.1">−.1</button>
+                    <button class="adj-btn" data-target="smoke-bottom" data-delta="0.1">+.1</button>
+                    <button class="adj-btn" data-target="smoke-bottom" data-delta="1">+1</button>
+                </div>
+                <input type="range" id="smoke-bottom" min="0" max="50" step="0.1" value="15.5" style="width: 100%;">
+            </div>
+            <div style="margin-bottom: 8px;">
+                <div style="display: flex; align-items: center; gap: 6px; margin-bottom: 3px;">
+                    <label style="flex: 1;">Right: <span id="smoke-right-val">36.6</span>%</label>
+                    <button class="adj-btn" data-target="smoke-right" data-delta="-1">−1</button>
+                    <button class="adj-btn" data-target="smoke-right" data-delta="-0.1">−.1</button>
+                    <button class="adj-btn" data-target="smoke-right" data-delta="0.1">+.1</button>
+                    <button class="adj-btn" data-target="smoke-right" data-delta="1">+1</button>
+                </div>
+                <input type="range" id="smoke-right" min="0" max="100" step="0.1" value="36.6" style="width: 100%;">
+            </div>
+            <div style="margin-bottom: 8px;">
+                <div style="display: flex; align-items: center; gap: 6px; margin-bottom: 3px;">
+                    <label style="flex: 1;">Width: <span id="smoke-width-val">14.5</span>%</label>
+                    <button class="adj-btn" data-target="smoke-width" data-delta="-1">−1</button>
+                    <button class="adj-btn" data-target="smoke-width" data-delta="-0.1">−.1</button>
+                    <button class="adj-btn" data-target="smoke-width" data-delta="0.1">+.1</button>
+                    <button class="adj-btn" data-target="smoke-width" data-delta="1">+1</button>
+                </div>
+                <input type="range" id="smoke-width" min="1" max="50" step="0.1" value="14.5" style="width: 100%;">
+            </div>
+            <div style="margin-bottom: 8px;">
+                <div style="display: flex; align-items: center; gap: 6px; margin-bottom: 3px;">
+                    <label style="flex: 1;">Height: <span id="smoke-height-val">29</span>%</label>
+                    <button class="adj-btn" data-target="smoke-height" data-delta="-1">−1</button>
+                    <button class="adj-btn" data-target="smoke-height" data-delta="-0.1">−.1</button>
+                    <button class="adj-btn" data-target="smoke-height" data-delta="0.1">+.1</button>
+                    <button class="adj-btn" data-target="smoke-height" data-delta="1">+1</button>
+                </div>
+                <input type="range" id="smoke-height" min="1" max="50" step="0.1" value="29" style="width: 100%;">
+            </div>
+            <div style="border-top: 1px solid #444; margin-top: 8px; padding-top: 8px; margin-bottom: 8px;">
+                <div style="display: flex; align-items: center; gap: 6px; margin-bottom: 3px;">
+                    <label style="flex: 1;">Particle Size: <span id="smoke-psize-val">38</span>px</label>
+                    <button class="adj-btn" data-target="smoke-psize" data-delta="-10">−10</button>
+                    <button class="adj-btn" data-target="smoke-psize" data-delta="-5">−5</button>
+                    <button class="adj-btn" data-target="smoke-psize" data-delta="5">+5</button>
+                    <button class="adj-btn" data-target="smoke-psize" data-delta="10">+10</button>
+                </div>
+                <input type="range" id="smoke-psize" min="10" max="200" step="1" value="38" style="width: 100%;">
+            </div>
+            <div style="margin-bottom: 8px;">
+                <div style="display: flex; align-items: center; gap: 6px; margin-bottom: 3px;">
+                    <label style="flex: 1;">Peak Opacity: <span id="smoke-opacity-val">0.95</span></label>
+                    <button class="adj-btn" data-target="smoke-opacity" data-delta="-0.1">−.1</button>
+                    <button class="adj-btn" data-target="smoke-opacity" data-delta="-0.05">−.05</button>
+                    <button class="adj-btn" data-target="smoke-opacity" data-delta="0.05">+.05</button>
+                    <button class="adj-btn" data-target="smoke-opacity" data-delta="0.1">+.1</button>
+                </div>
+                <input type="range" id="smoke-opacity" min="0.05" max="1" step="0.05" value="0.95" style="width: 100%;">
+            </div>
+            <div style="background: #333; padding: 8px; border-radius: 4px; margin-top: 10px;">
+                <div style="font-size: 10px; color: #aaa; margin-bottom: 4px;">Copy these values:</div>
+                <code id="smoke-values" style="font-size: 11px; color: #4fc3f7;">bottom: 15.5%; right: 36.6%; width: 14.5%; height: 29%; particle: 38px; opacity: 0.95;</code>
+            </div>
+            </div>
         </div>
         </div>
         <style>
@@ -1401,6 +1578,13 @@
             }
             .adj-btn:hover {
                 background: #666;
+            }
+            .debug-section-header:hover {
+                color: #4fc3f7;
+            }
+            .debug-chevron {
+                font-size: 14px;
+                transition: transform 0.2s;
             }
         </style>
     </div>
@@ -1421,6 +1605,27 @@
                 minimized = !minimized;
                 controlsContent.style.display = minimized ? 'none' : 'block';
                 minimizeBtn.textContent = minimized ? '+' : '−';
+            });
+
+            // Collapsible section accordion
+            document.querySelectorAll('.debug-section-header').forEach(header => {
+                header.addEventListener('click', () => {
+                    const sectionId = header.dataset.section;
+                    const section = document.getElementById(sectionId);
+                    const chevron = header.querySelector('.debug-chevron');
+                    const isOpen = section.style.display !== 'none';
+                    // Close all sections
+                    document.querySelectorAll('.debug-section-header').forEach(h => {
+                        const s = document.getElementById(h.dataset.section);
+                        s.style.display = 'none';
+                        h.querySelector('.debug-chevron').textContent = '+';
+                    });
+                    // Toggle clicked section
+                    if (!isOpen) {
+                        section.style.display = 'block';
+                        chevron.textContent = '−';
+                    }
+                });
             });
 
             // Remove CSS animations to allow JS control of opacity
@@ -1579,6 +1784,81 @@
             motoLeft.addEventListener('input', updateMotorcycle);
             motoWidth.addEventListener('input', updateMotorcycle);
 
+            // Smoke position controls
+            const smokeContainer = document.querySelector('.exhaust-smoke');
+            const smokeParticles = document.querySelectorAll('.smoke-particle');
+            const smokeBottom = document.getElementById('smoke-bottom');
+            const smokeRight = document.getElementById('smoke-right');
+            const smokeWidth = document.getElementById('smoke-width');
+            const smokeHeight = document.getElementById('smoke-height');
+            const smokePsize = document.getElementById('smoke-psize');
+            const smokeOpacity = document.getElementById('smoke-opacity');
+            const smokeBottomVal = document.getElementById('smoke-bottom-val');
+            const smokeRightVal = document.getElementById('smoke-right-val');
+            const smokeWidthVal = document.getElementById('smoke-width-val');
+            const smokeHeightVal = document.getElementById('smoke-height-val');
+            const smokePsizeVal = document.getElementById('smoke-psize-val');
+            const smokeOpacityVal = document.getElementById('smoke-opacity-val');
+            const smokeValues = document.getElementById('smoke-values');
+
+            // Dynamic keyframe stylesheet for smoke opacity tuning
+            const smokeStyleSheet = document.createElement('style');
+            document.head.appendChild(smokeStyleSheet);
+
+            function updateSmokeKeyframes(peakOpacity) {
+                const midOpacity = (peakOpacity * 0.55).toFixed(2);
+                smokeStyleSheet.textContent = `
+                    @keyframes smoke-rise {
+                        0%   { opacity: 0; transform: translate(-50%, 0) scale(0.5); }
+                        10%  { opacity: ${peakOpacity}; }
+                        50%  { opacity: ${midOpacity}; transform: translate(calc(-50% + 12px), -80px) scale(1.4); }
+                        100% { opacity: 0; transform: translate(calc(-50% + 25px), -160px) scale(2.5); }
+                    }
+                    @keyframes smoke-rise-mobile {
+                        0%   { opacity: 0; transform: translate(-50%, 0) scale(0.5); }
+                        10%  { opacity: ${peakOpacity}; }
+                        50%  { opacity: ${midOpacity}; transform: translate(calc(-50% + 8px), -50px) scale(1.4); }
+                        100% { opacity: 0; transform: translate(calc(-50% + 15px), -100px) scale(2.5); }
+                    }
+                `;
+            }
+
+            function updateSmoke() {
+                const bottom = smokeBottom.value;
+                const right = smokeRight.value;
+                const width = smokeWidth.value;
+                const height = smokeHeight.value;
+                const psize = smokePsize.value;
+                const opacity = smokeOpacity.value;
+
+                smokeContainer.style.bottom = bottom + '%';
+                smokeContainer.style.right = right + '%';
+                smokeContainer.style.width = width + '%';
+                smokeContainer.style.height = height + '%';
+
+                smokeParticles.forEach(p => {
+                    p.style.width = psize + 'px';
+                    p.style.height = psize + 'px';
+                });
+
+                updateSmokeKeyframes(opacity);
+
+                smokeBottomVal.textContent = bottom;
+                smokeRightVal.textContent = right;
+                smokeWidthVal.textContent = width;
+                smokeHeightVal.textContent = height;
+                smokePsizeVal.textContent = psize;
+                smokeOpacityVal.textContent = opacity;
+                smokeValues.textContent = `bottom: ${bottom}%; right: ${right}%; width: ${width}%; height: ${height}%; particle: ${psize}px; opacity: ${opacity};`;
+            }
+
+            smokeBottom.addEventListener('input', updateSmoke);
+            smokeRight.addEventListener('input', updateSmoke);
+            smokeWidth.addEventListener('input', updateSmoke);
+            smokeHeight.addEventListener('input', updateSmoke);
+            smokePsize.addEventListener('input', updateSmoke);
+            smokeOpacity.addEventListener('input', updateSmoke);
+
             // Adjustment buttons
             document.querySelectorAll('.adj-btn').forEach(btn => {
                 btn.addEventListener('click', () => {
@@ -1594,6 +1874,8 @@
                         updateSparkle();
                     } else if (btn.dataset.target.startsWith('moto')) {
                         updateMotorcycle();
+                    } else if (btn.dataset.target.startsWith('smoke')) {
+                        updateSmoke();
                     }
                 });
             });
