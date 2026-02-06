@@ -274,12 +274,11 @@
             position: fixed;
             top: 0;
             left: 0;
-            width: 100vw;
-            height: 100vh;
+            right: 0;
+            bottom: 0;
             z-index: -1;
             background-color: var(--bg-pinstripe-1);
             transition: background-color 1.5s ease;
-            /* Smooth transition */
         }
 
         /* Ensure Content sits above Decorations */
@@ -1230,6 +1229,7 @@
             left: 50%;
             transform: translate(-50%, -50%);
             pointer-events: none;
+            z-index: 4; /* Above motorcycle (3), sparkle (2), eyes (1) */
         }
 
         .hero-signature-svg {
@@ -2184,55 +2184,95 @@
                 });
             }
 
-            renderFilteredArtworks(filtered);
+            renderFilteredArtworks(filtered, true);
         }
 
         // Helper function to render filtered artworks
-        function renderFilteredArtworks(filtered) {
+        // expandImages: when true, multi-image artworks become individual cards (no carousels)
+        function renderFilteredArtworks(filtered, expandImages = false) {
             filtered.forEach(art => {
-                const card = document.createElement('div');
-                card.className = 'art-card';
-                card.dataset.type = art.type;
-                card.dataset.title = art.title;
-                card.dataset.medium = art.medium;
-                card.dataset.size = art.size || '';
-
-                const wrapper = document.createElement('div');
-                wrapper.className = 'image-wrapper';
-
                 const hasMultipleImages = art.images && art.images.length > 1;
 
-                if (hasMultipleImages) {
-                    new Carousel(wrapper, art.images, art.title);
+                if (expandImages && hasMultipleImages) {
+                    // Expand each image into its own card
+                    art.images.forEach((imageSrc, i) => {
+                        const card = document.createElement('div');
+                        card.className = 'art-card';
+                        card.dataset.type = art.type;
+                        card.dataset.title = `${art.title} - View ${i + 1}`;
+                        card.dataset.medium = art.medium;
+                        card.dataset.size = art.size || '';
+
+                        const wrapper = document.createElement('div');
+                        wrapper.className = 'image-wrapper';
+
+                        const img = document.createElement('img');
+                        img.src = imageSrc;
+                        img.alt = `${art.title} - View ${i + 1}`;
+                        img.loading = "lazy";
+                        wrapper.appendChild(img);
+
+                        const mobileMeta = document.createElement('div');
+                        mobileMeta.className = 'mobile-meta';
+
+                        const mTitle = document.createElement('h3');
+                        mTitle.textContent = `${art.title} - View ${i + 1}`;
+
+                        const mDetail = document.createElement('p');
+                        mDetail.textContent = art.medium + (art.size ? ` (${art.size})` : '');
+
+                        mobileMeta.appendChild(mTitle);
+                        mobileMeta.appendChild(mDetail);
+
+                        card.appendChild(wrapper);
+                        card.appendChild(mobileMeta);
+
+                        artFeed.appendChild(card);
+                    });
                 } else {
-                    const imageSrc = art.src || art.images[0];
-                    const img = document.createElement('img');
-                    img.src = imageSrc;
-                    img.alt = art.title;
-                    img.loading = "lazy";
-                    wrapper.appendChild(img);
+                    const card = document.createElement('div');
+                    card.className = 'art-card';
+                    card.dataset.type = art.type;
+                    card.dataset.title = art.title;
+                    card.dataset.medium = art.medium;
+                    card.dataset.size = art.size || '';
+
+                    const wrapper = document.createElement('div');
+                    wrapper.className = 'image-wrapper';
+
+                    if (hasMultipleImages) {
+                        new Carousel(wrapper, art.images, art.title);
+                    } else {
+                        const imageSrc = art.src || art.images[0];
+                        const img = document.createElement('img');
+                        img.src = imageSrc;
+                        img.alt = art.title;
+                        img.loading = "lazy";
+                        wrapper.appendChild(img);
+                    }
+
+                    const mobileMeta = document.createElement('div');
+                    mobileMeta.className = 'mobile-meta';
+
+                    const mTitle = document.createElement('h3');
+                    mTitle.textContent = art.title;
+
+                    const mDetail = document.createElement('p');
+                    mDetail.textContent = art.medium + (art.size ? ` (${art.size})` : '');
+
+                    mobileMeta.appendChild(mTitle);
+                    mobileMeta.appendChild(mDetail);
+
+                    card.appendChild(wrapper);
+                    card.appendChild(mobileMeta);
+
+                    artFeed.appendChild(card);
                 }
-
-                const mobileMeta = document.createElement('div');
-                mobileMeta.className = 'mobile-meta';
-
-                const mTitle = document.createElement('h3');
-                mTitle.textContent = art.title;
-
-                const mDetail = document.createElement('p');
-                mDetail.textContent = art.medium + (art.size ? ` (${art.size})` : '');
-
-                mobileMeta.appendChild(mTitle);
-                mobileMeta.appendChild(mDetail);
-
-                card.appendChild(wrapper);
-                card.appendChild(mobileMeta);
-
-                artFeed.appendChild(card);
             });
 
-            // Re-initialize dots
-            filtered.forEach((_, index) => {
+            // Re-initialize dots based on actual rendered cards
+            const cards = artFeed.querySelectorAll('.art-card');
+            cards.forEach((_, index) => {
                 const dot = document.createElement('div');
                 dot.className = 'dot';
                 if (index === 0) dot.classList.add('active');
