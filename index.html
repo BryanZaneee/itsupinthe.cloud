@@ -2046,7 +2046,10 @@
             mainNav.classList.remove('open');
             document.body.classList.remove('menu-open');
             document.body.style.top = '';
-            window.scrollTo(0, savedScrollY);
+            // Always scroll past the hero so artwork is visible
+            const hero = document.getElementById('hero');
+            const minScroll = hero ? hero.offsetTop + hero.offsetHeight : 0;
+            window.scrollTo(0, Math.max(savedScrollY, minScroll));
             menuToggle.textContent = 'Menu';
             menuToggle.style.color = '';
         }
