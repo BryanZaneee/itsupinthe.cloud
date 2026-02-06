@@ -522,6 +522,14 @@
             width: 70%;
             max-width: 900px;
             position: relative;
+            opacity: 0;
+            transform: translateY(60px);
+            transition: opacity 0.8s ease, transform 0.8s ease;
+        }
+
+        .art-card.revealed {
+            opacity: 1;
+            transform: translateY(0);
         }
 
         .image-wrapper {
@@ -711,6 +719,14 @@
             display: none;
             margin-top: 1rem;
             text-align: left;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.6s ease 0.2s, transform 0.6s ease 0.2s;
+        }
+
+        .art-card.revealed .mobile-meta {
+            opacity: 1;
+            transform: translateY(0);
         }
 
         .mobile-meta h3 {
@@ -1287,6 +1303,16 @@
             }
             .exhaust-smoke {
                 display: none;
+            }
+            .art-card {
+                opacity: 1;
+                transform: none;
+                transition: none;
+            }
+            .mobile-meta {
+                opacity: 1;
+                transform: none;
+                transition: none;
             }
         }
 
@@ -2096,6 +2122,7 @@
         const dotsContainer = document.getElementById('progress-dots');
 
         let observer; // Global observer
+        let revealObserver; // Scroll-reveal observer
 
         function renderArtworks(filterType = 'all') {
             // Clear current
@@ -2243,6 +2270,7 @@
 
         function initObserver() {
             if (observer) observer.disconnect();
+            if (revealObserver) revealObserver.disconnect();
 
             const cards = document.querySelectorAll('.art-card');
             const dots = document.querySelectorAll('.dot');
@@ -2296,6 +2324,22 @@
             }, observerOptions);
 
             cards.forEach(card => observer.observe(card));
+
+            // Reveal observer — triggers card entrance animations
+            revealObserver = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('revealed');
+                        revealObserver.unobserve(entry.target);
+                    }
+                });
+            }, {
+                root: null,
+                rootMargin: '0px 0px -10% 0px',
+                threshold: 0
+            });
+
+            cards.forEach(card => revealObserver.observe(card));
 
             // Initialize first card
             if (cards.length > 0) {
