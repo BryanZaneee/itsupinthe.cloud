@@ -832,23 +832,16 @@
             }
 
             nav .logo {
-                display: none;
-                /* Logo handled by .hero-signature when menu open */
-            }
-
-            /* Hero signature locks to top-left when menu opens */
-            .hero-signature.menu-locked {
                 position: fixed;
                 top: 20px;
                 left: 20px;
-                transform: none;
-                z-index: 300;
+                z-index: 700;
             }
 
-            .hero-signature.menu-locked .hero-signature-svg {
+            nav .logo .signature-svg {
                 height: 5rem;
+                width: auto;
                 color: #000;
-                filter: none;
             }
 
             /* Lock body scroll when mobile menu is open */
@@ -859,8 +852,8 @@
                 height: 100%;
             }
 
-            /* Hide mobile-header logo when menu is open */
-            body.menu-open .mobile-logo {
+            /* Hide mobile-header when menu is open (nav has its own logo) */
+            body.menu-open #mobile-header {
                 opacity: 0;
                 pointer-events: none;
             }
@@ -2038,8 +2031,6 @@
         const mainNav = document.getElementById('main-nav');
         const menuToggle = document.getElementById('menu-toggle');
         const closeMenuBtn = document.getElementById('close-menu-btn');
-        const heroSignature = document.querySelector('.hero-signature');
-
         // Toggle Menu (Mobile) - with scroll lock
         let savedScrollY = 0;
 
@@ -2049,9 +2040,6 @@
             document.body.classList.add('menu-open');
             document.body.style.top = `-${savedScrollY}px`;
             menuToggle.style.color = '#000';
-            if (heroSignature) {
-                heroSignature.classList.add('menu-locked');
-            }
         }
 
         function closeMenu() {
@@ -2061,9 +2049,6 @@
             window.scrollTo(0, savedScrollY);
             menuToggle.textContent = 'Menu';
             menuToggle.style.color = '';
-            if (heroSignature) {
-                heroSignature.classList.remove('menu-locked');
-            }
         }
 
         menuToggle.addEventListener('click', openMenu);
