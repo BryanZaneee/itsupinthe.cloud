@@ -819,8 +819,8 @@
                 height: 100vh;
                 background: var(--bg-pinstripe-1);
                 /* Use solid color to cover content */
-                transform: translateX(100%);
-                /* Hidden by default */
+                transform: translateY(-100%);
+                /* Hidden above viewport */
                 padding: 6rem 2rem;
                 /* Add top padding to clear header */
                 align-items: center;
@@ -828,12 +828,42 @@
             }
 
             nav.open {
-                transform: translateX(0);
+                transform: translateY(0);
+                z-index: 600; /* Above hero (z-index: 500) when menu is open */
             }
 
             nav .logo {
                 display: none;
-                /* Logo is in header now */
+                /* Logo handled by .hero-signature when menu open */
+            }
+
+            /* Hero signature locks to top-left when menu opens */
+            .hero-signature.menu-locked {
+                position: fixed;
+                top: 20px;
+                left: 20px;
+                transform: none;
+                z-index: 300;
+            }
+
+            .hero-signature.menu-locked .hero-signature-svg {
+                height: 5rem;
+                color: #000;
+                filter: none;
+            }
+
+            /* Lock body scroll when mobile menu is open */
+            body.menu-open {
+                overflow: hidden;
+                position: fixed;
+                width: 100%;
+                height: 100%;
+            }
+
+            /* Hide mobile-header logo when menu is open */
+            body.menu-open .mobile-logo {
+                opacity: 0;
+                pointer-events: none;
             }
 
             main {
@@ -1266,7 +1296,7 @@
     </section>
 
     <!-- DEBUG: Animation Frame Scrubber - Remove after testing -->
-    <div id="frame-controls" style="position: fixed; top: 10px; right: 10px; background: rgba(0,0,0,0.9); padding: 15px; border-radius: 8px; z-index: 9999; color: white; font-family: monospace; font-size: 12px; min-width: 220px;">
+    <div id="frame-controls" style="position: fixed; bottom: 10px; left: 10px; background: rgba(0,0,0,0.9); padding: 15px; border-radius: 8px; z-index: 9999; color: white; font-family: monospace; font-size: 12px; min-width: 220px;">
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
             <span style="font-weight: bold;">Debug Controls</span>
             <button id="minimize-btn" style="background: #4a4a4a; color: white; border: none; border-radius: 3px; width: 24px; height: 24px; cursor: pointer; font-size: 16px; line-height: 1;">−</button>
@@ -1722,7 +1752,7 @@
                 <div class="secondary-nav">
                     <span class="category-header" onclick="window.location.href='about.html'">About</span>
                     <span class="category-header"
-                        onclick="window.open('https://instagram.com', '_blank')">Instagram</span>
+                        onclick="window.open('https://www.instagram.com/esmebellle/', '_blank')">Instagram</span>
                 </div>
             </div>
 
@@ -2008,19 +2038,38 @@
         const mainNav = document.getElementById('main-nav');
         const menuToggle = document.getElementById('menu-toggle');
         const closeMenuBtn = document.getElementById('close-menu-btn');
+        const heroSignature = document.querySelector('.hero-signature');
 
-        // Toggle Menu (Mobile)
-        menuToggle.addEventListener('click', () => {
+        // Toggle Menu (Mobile) - with scroll lock
+        let savedScrollY = 0;
+
+        function openMenu() {
+            savedScrollY = window.scrollY;
             mainNav.classList.add('open');
+            document.body.classList.add('menu-open');
+            document.body.style.top = `-${savedScrollY}px`;
             menuToggle.style.color = '#000';
-        });
+            if (heroSignature) {
+                heroSignature.classList.add('menu-locked');
+            }
+        }
 
-        // Close Button (Mobile)
-        closeMenuBtn.addEventListener('click', () => {
+        function closeMenu() {
             mainNav.classList.remove('open');
+            document.body.classList.remove('menu-open');
+            document.body.style.top = '';
+            window.scrollTo(0, savedScrollY);
             menuToggle.textContent = 'Menu';
             menuToggle.style.color = '';
-        });
+            if (heroSignature) {
+                heroSignature.classList.remove('menu-locked');
+            }
+        }
+
+        menuToggle.addEventListener('click', openMenu);
+
+        // Close Button (Mobile)
+        closeMenuBtn.addEventListener('click', closeMenu);
 
         // Click-based expansion for main "Works" menu
         document.querySelectorAll('.has-submenu > .nav-link').forEach(link => {
@@ -2062,9 +2111,7 @@
                 renderArtworksByMedium(filterType, medium);
 
                 // Close mobile menu
-                mainNav.classList.remove('open');
-                menuToggle.textContent = 'Menu';
-                menuToggle.style.color = '';
+                closeMenu();
             });
         });
 
@@ -2077,9 +2124,7 @@
                 renderArtworksByCollection(collection);
 
                 // Close mobile menu
-                mainNav.classList.remove('open');
-                menuToggle.textContent = 'Menu';
-                menuToggle.style.color = '';
+                closeMenu();
             });
         });
 
