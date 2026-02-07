@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Esmeralda - About</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400;1,6..96,400&family=Monsieur+La+Doulaise&display=swap"
+        rel="stylesheet">
+
+    <style>
+        /* --- RESET & VARIABLES --- */
+        :root {
+            --bg-pinstripe-1: #fdfbf7;
+            --bg-pinstripe-2: #c4d0e0;
+            --bg-clay: #e0cec7;
+            --bg-paper: #ffffff;
+            --text-main: #1a1a1a;
+            --font-hand: 'Monsieur La Doulaise', cursive;
+            --font-body: 'Bodoni Moda', serif;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            cursor: none;
+        }
+
+        body {
+            font-family: var(--font-body);
+            color: var(--text-main);
+            overflow-x: hidden;
+            background-color: var(--bg-pinstripe-1);
+        }
+
+        /* --- CUSTOM CURSOR --- */
+        #cursor {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 15px;
+            height: 15px;
+            border: 1.5px solid #000;
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 9999;
+            transform: translate(-50%, -50%);
+            transition: width 0.3s, height 0.3s;
+        }
+
+        #cursor.hovered {
+            width: 40px;
+            height: 40px;
+            background-color: transparent;
+            border: 1px solid #000;
+        }
+
+        @media (max-width: 768px) {
+            #cursor {
+                display: none;
+            }
+
+            * {
+                cursor: auto;
+            }
+        }
+
+        /* --- DYNAMIC BACKGROUND LAYERS --- */
+        #bg-dynamic {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: -1;
+            background-color: var(--bg-pinstripe-1);
+            transition: background-color 1.5s ease;
+        }
+
+        /* --- BACK BUTTON --- */
+        .back-button {
+            position: fixed;
+            top: 2rem;
+            left: 2rem;
+            z-index: 150;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            text-decoration: none;
+            color: var(--text-main);
+            font-family: var(--font-body);
+            font-size: 1rem;
+            font-style: italic;
+            letter-spacing: 0.5px;
+            transition: all 0.3s ease;
+        }
+
+        .back-button:hover {
+            transform: translateX(-5px);
+        }
+
+        .back-button:hover .back-arrow {
+            transform: translateX(-3px);
+        }
+
+        .back-arrow {
+            display: inline-block;
+            font-size: 1.4rem;
+            font-style: normal;
+            transition: transform 0.3s ease;
+            line-height: 1;
+        }
+
+        .back-text {
+            border-bottom: 1px solid transparent;
+            transition: border-color 0.3s ease;
+        }
+
+        .back-button:hover .back-text {
+            border-bottom-color: var(--text-main);
+        }
+
+        @media (max-width: 768px) {
+            .back-button {
+                top: 1.5rem;
+                left: 1.5rem;
+                font-size: 0.9rem;
+            }
+        }
+
+        /* --- CONTENT --- */
+        main {
+            width: 100%;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 8rem 4rem;
+        }
+
+        .about-section {
+            margin-bottom: 6rem;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeUp 1s ease forwards;
+        }
+
+        /* Bio Layout */
+        .bio-container {
+            display: flex;
+            gap: 4rem;
+            align-items: flex-start;
+        }
+
+        .bio-text {
+            flex: 1;
+        }
+
+        .bio-image {
+            width: 300px;
+            flex-shrink: 0;
+        }
+
+        .bio-image img {
+            width: 100%;
+            height: auto;
+            border-radius: 2px;
+            display: block;
+        }
+
+        @media (max-width: 900px) {
+            .bio-container {
+                flex-direction: column-reverse;
+                gap: 2rem;
+            }
+
+            .bio-image {
+                width: 100%;
+                max-width: 300px;
+                margin: 0 auto;
+            }
+        }
+
+        .about-section:nth-child(2) {
+            animation-delay: 0.3s;
+        }
+
+        h1 {
+            font-family: var(--font-hand);
+            font-size: 4rem;
+            margin-bottom: 2rem;
+            font-weight: 400;
+        }
+
+        h2 {
+            font-family: var(--font-body);
+            font-size: 1.2rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 1.5rem;
+            border-bottom: 1px solid #000;
+            padding-bottom: 10px;
+            display: inline-block;
+        }
+
+        p {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            margin-bottom: 1.5rem;
+            max-width: 800px;
+        }
+
+        @keyframes fadeUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @media (max-width: 768px) {
+            main {
+                padding: 6rem 2rem;
+            }
+
+            h1 {
+                font-size: 3rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div id="bg-dynamic"></div>
+    <div id="cursor"></div>
+
+    <a href="index.html" class="back-button">
+        <span class="back-arrow">&larr;</span>
+        <span class="back-text">Back to Works</span>
+    </a>
+
+    <main>
+        <div class="about-section bio-container">
+            <div class="bio-text">
+                <h1>Bio</h1>
+                <p>Esmé Belle, (Esmeralda Hernandez), is a multidisciplinary artist born and raised in Long Island, New
+                    York. Her work merges mundane moments captured from the countries she's traveled to, into
+                    surrealistic paintings, drawings, photography, film, animation, and ceramic sculptures.</p>
+                <p>Esmé has exhibited across New York, including the Student Art Show at Suffolk County Community
+                    College, Best of SUNY art exhibition (Albany, NY), and Abstract Arrangement Multi Media Showcase
+                    (Brooklyn, NY).</p>
+                <p>Esmé has also done over a dozen promotional short films for fashion, beauty, and perfume brands such
+                    as Gap, Versace, Prada Beauty, Givenchy, and Moschino. Her practice reflects a deep connection to
+                    her Salvadoran heritage and the everyday poetry found in domestic life, using art as a bridge
+                    between personal narrative and collective experience.</p>
+            </div>
+            <div class="bio-image">
+                <img src="assets/elements/esme_about.png" alt="Esmé Belle">
+            </div>
+        </div>
+
+        <div class="about-section">
+            <h1>Artist Statement</h1>
+            <p>Before I ever called myself an artist, I was a kid hunched over the kitchen table, turning glitter,
+                tape, and old photos into gifts that meant more than anything I could buy. I think that's still what
+                drives me today, turning ordinary moments into something people can feel, something that quietly
+                says, I see you.</p>
+            <p>A lot of my work circles back to memory, the kind you don't even realize you're carrying. The colors
+                and patterns from my Salvadoran household, the smell of food during late-night painting sessions,
+                the way a single photograph can unlock an entire history. Hands appear in my work again and again,
+                maybe because they're the first thing I notice about people, or because so much of our lives depends
+                on what we hold and what we let go.</p>
+            <p>Self-portraiture has become another thread in my practice; partly because I'm always available as a
+                subject, but mostly because studying myself becomes a way of confronting emotions I would otherwise
+                avoid.</p>
+            <p>My art spans oil painting, charcoal drawing, ceramics, animation, and mixed media, but the story
+                always comes first. Whether I'm painting on a salvaged blanket, building a ceramic planter layered
+                with graffiti motifs, or reconstructing memories through charcoal, each piece begins with a small
+                personal truth before expanding into something shared. I want people to feel calm, even cozy, when
+                they look at my work, as if they've stepped into a familiar memory or a fever dream they
+                half-remember.</p>
+            <p>If my work says anything about me, I hope it reflects how deeply I value the people I come from, the
+                places that shaped me, and the stories that keep pulling me back to create again.</p>
+        </div>
+    </main>
+
+    <script>
+        // --- CURSOR ---
+        const cursor = document.getElementById('cursor');
+        document.addEventListener('mousemove', (e) => {
+            cursor.style.left = e.clientX + 'px';
+            cursor.style.top = e.clientY + 'px';
+        });
+
+        document.querySelectorAll('a').forEach(el => {
+            el.addEventListener('mouseenter', () => cursor.classList.add('hovered'));
+            el.addEventListener('mouseleave', () => cursor.classList.remove('hovered'));
+        });
+    </script>
+</body>
+
+</html>

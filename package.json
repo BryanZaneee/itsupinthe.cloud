@@ -1,25 +1,22 @@
 {
-  "name": "esme",
+  "name": "bryanzane-hub",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "description": "Hub page for itsupinthe.cloud linking to Bryan Zane's projects",
+  "main": "index.html",
   "scripts": {
-    "dev": "vite",
+    "dev": "python3 -m http.server 8080",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/BryanZaneee/esme.git"
   },
-  "keywords": [],
-  "author": "",
+  "keywords": ["hub", "portfolio", "links"],
+  "author": "Bryan Zane",
   "license": "ISC",
   "type": "commonjs",
   "bugs": {
     "url": "https://github.com/BryanZaneee/esme/issues"
   },
-  "homepage": "https://github.com/BryanZaneee/esme#readme",
-  "devDependencies": {
-    "vite": "^7.3.0"
-  }
+  "homepage": "https://github.com/BryanZaneee/esme#readme"
 }
