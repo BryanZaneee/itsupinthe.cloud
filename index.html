@@ -4,7 +4,17 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>itsupinthe.cloud - Bryan Zane</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;700&family=Fira+Code:wght@400;700&family=Courier+Prime:wght@400;700&display=swap" rel="stylesheet">
     <style>
+        :root {
+            --font-system: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            --font-roboto-mono: 'Roboto Mono', monospace;
+            --font-fira-code: 'Fira Code', monospace;
+            --font-courier-prime: 'Courier Prime', monospace;
+        }
+
         * {
             margin: 0;
             padding: 0;
@@ -12,7 +22,7 @@
         }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            font-family: var(--font-system);
             background-color: #ffffff;
             color: #000000;
             min-height: 100vh;
@@ -21,6 +31,36 @@
             align-items: center;
             justify-content: center;
             padding: 20px;
+            transition: background-color 0.5s ease, color 0.5s ease;
+        }
+
+        body[data-font="roboto-mono"] {
+            font-family: var(--font-roboto-mono);
+        }
+
+        body[data-font="fira-code"] {
+            font-family: var(--font-fira-code);
+        }
+
+        body[data-font="courier-prime"] {
+            font-family: var(--font-courier-prime);
+        }
+
+        body:has(a[href="/esme-archive/"]:hover) {
+            background-color: #FFE4E8;
+        }
+
+        body:has(a[href="https://bryanzane.com"]:hover) {
+            background-color: #E3F2FD;
+        }
+
+        body:has(a[href*="github.com"]:hover) {
+            background-color: #24292E;
+            color: #ffffff;
+        }
+
+        body:has(a[href*="github.com"]:hover) footer {
+            color: #cccccc;
         }
 
         main {
@@ -49,6 +89,7 @@
             padding: 0.5rem;
             border-radius: 4px;
             transition: background-color 0.2s ease;
+            position: relative;
         }
 
         a:hover {
@@ -58,6 +99,82 @@
         a:focus {
             outline: 2px solid #0066cc;
             outline-offset: 2px;
+        }
+
+        a[data-tooltip]::after {
+            content: attr(data-tooltip);
+            position: absolute;
+            bottom: -35px;
+            left: 50%;
+            transform: translateX(-50%) translateY(-5px);
+            background-color: rgba(0, 0, 0, 0.85);
+            color: #ffffff;
+            padding: 6px 12px;
+            border-radius: 4px;
+            font-size: 0.875rem;
+            white-space: nowrap;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease, transform 0.3s ease;
+        }
+
+        a[data-tooltip]:hover::after {
+            opacity: 0.85;
+            transform: translateX(-50%) translateY(0);
+        }
+
+        body:has(a[href*="github.com"]:hover) a {
+            color: #58a6ff;
+        }
+
+        .font-selector {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            display: flex;
+            gap: 8px;
+            z-index: 1000;
+        }
+
+        .font-btn {
+            background-color: #ffffff;
+            color: #000000;
+            border: 2px solid #000000;
+            border-radius: 4px;
+            padding: 8px 12px;
+            font-size: 0.875rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.2s ease, color 0.2s ease;
+        }
+
+        .font-btn:hover {
+            background-color: #f0f0f0;
+        }
+
+        .font-btn:focus {
+            outline: 2px solid #0066cc;
+            outline-offset: 2px;
+        }
+
+        .font-btn.active {
+            background-color: #000000;
+            color: #ffffff;
+        }
+
+        body:has(a[href*="github.com"]:hover) .font-btn {
+            background-color: #24292E;
+            color: #ffffff;
+            border-color: #ffffff;
+        }
+
+        body:has(a[href*="github.com"]:hover) .font-btn:hover {
+            background-color: #3d444d;
+        }
+
+        body:has(a[href*="github.com"]:hover) .font-btn.active {
+            background-color: #ffffff;
+            color: #24292E;
         }
 
         footer {
@@ -76,21 +193,80 @@
             a {
                 font-size: 1rem;
             }
+
+            .font-selector {
+                top: 10px;
+                right: 10px;
+                gap: 6px;
+            }
+
+            .font-btn {
+                padding: 6px 10px;
+                font-size: 0.75rem;
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            body,
+            a,
+            a::after,
+            .font-btn {
+                transition: none;
+            }
         }
     </style>
 </head>
 <body>
+    <div class="font-selector">
+        <button class="font-btn" data-font="roboto-mono" aria-label="Roboto Mono font">Rm</button>
+        <button class="font-btn" data-font="fira-code" aria-label="Fira Code font">Fc</button>
+        <button class="font-btn" data-font="courier-prime" aria-label="Courier Prime font">Cp</button>
+    </div>
     <main>
         <h1>im bryan zane and this is my project hub, check them out.<br>these are some projects i created.</h1>
         <nav>
-            <a href="/esme-archive/">esmebelle.studio</a>
-            <a href="https://bryanzane.com">bryanzane.com</a>
-            <a href="https://github.com/BryanZaneee">GitHub</a>
+            <a href="/esme-archive/" data-tooltip="Esme artist portfolio">esmebelle.studio</a>
+            <a href="https://bryanzane.com" data-tooltip="My fleshed out portfolio website">bryanzane.com</a>
+            <a href="https://github.com/BryanZaneee" data-tooltip="Code repositories and projects">GitHub</a>
         </nav>
     </main>
     <footer>
         <p>&copy; 2026 Bryan Zane</p>
         <p>these projects were made with love by me</p>
     </footer>
+    <script>
+        // Load saved font preference on page load
+        const savedFont = localStorage.getItem('selectedFont');
+        if (savedFont) {
+            document.body.setAttribute('data-font', savedFont);
+        }
+
+        // Font selector functionality
+        const fontButtons = document.querySelectorAll('.font-btn');
+
+        fontButtons.forEach(button => {
+            const fontName = button.getAttribute('data-font');
+
+            // Set active state on load
+            if (savedFont === fontName) {
+                button.classList.add('active');
+            }
+
+            // Handle font switching
+            button.addEventListener('click', () => {
+                // Remove active from all buttons
+                fontButtons.forEach(btn => btn.classList.remove('active'));
+
+                // Set active on clicked button
+                button.classList.add('active');
+
+                // Apply font to body
+                document.body.setAttribute('data-font', fontName);
+
+                // Save preference
+                localStorage.setItem('selectedFont', fontName);
+            });
+        });
+    </script>
 </body>
 </html>
