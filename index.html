@@ -31,10 +31,13 @@
             cursor: none;
         }
 
+        html, body {
+            overflow-x: hidden;
+        }
+
         body {
             font-family: var(--font-body);
             color: var(--text-main);
-            overflow-x: hidden;
             background-color: var(--bg-pinstripe-1);
         }
 
@@ -595,7 +598,6 @@
             /* No additional styling */
         }
 
-        /* Carousel Container - Viewport */
         .carousel-container {
             width: 100%;
             position: relative;
@@ -623,7 +625,6 @@
             /* Chrome Safari */
         }
 
-        /* Individual Images in Carousel */
         /* Individual Images in Carousel */
         .carousel-image {
             flex-shrink: 0;
@@ -1017,6 +1018,7 @@
         #hero {
             position: relative;
             width: 100%;
+            overflow: hidden;
             display: flex;
             justify-content: center;
             background-color: var(--bg-pinstripe-1);
@@ -2498,22 +2500,21 @@
                 });
             }
 
-            renderFilteredArtworks(filtered, true);
+            renderFilteredArtworks(filtered);
         }
 
         // Helper function to render filtered artworks
-        // expandImages: when true, multi-image artworks become individual cards (no carousels)
-        function renderFilteredArtworks(filtered, expandImages = false) {
+        function renderFilteredArtworks(filtered) {
             filtered.forEach(art => {
                 const hasMultipleImages = art.images && art.images.length > 1;
 
-                if (expandImages && hasMultipleImages) {
+                if (hasMultipleImages) {
                     // Expand each image into its own card
                     art.images.forEach((imageSrc, i) => {
                         const card = document.createElement('div');
                         card.className = 'art-card';
                         card.dataset.type = art.type;
-                        card.dataset.title = `${art.title} - View ${i + 1}`;
+                        card.dataset.title = i === 0 ? art.title : `${art.title} - View ${i + 1}`;
                         card.dataset.medium = art.medium;
                         card.dataset.size = art.size || '';
 
@@ -2522,7 +2523,7 @@
 
                         const img = document.createElement('img');
                         img.src = imageSrc;
-                        img.alt = `${art.title} - View ${i + 1}`;
+                        img.alt = i === 0 ? art.title : `${art.title} - View ${i + 1}`;
                         img.loading = "lazy";
                         wrapper.appendChild(img);
 
@@ -2530,7 +2531,7 @@
                         mobileMeta.className = 'mobile-meta';
 
                         const mTitle = document.createElement('h3');
-                        mTitle.textContent = `${art.title} - View ${i + 1}`;
+                        mTitle.textContent = i === 0 ? art.title : `${art.title} - View ${i + 1}`;
 
                         const mDetail = document.createElement('p');
                         mDetail.textContent = art.medium + (art.size ? ` (${art.size})` : '');
@@ -2554,16 +2555,12 @@
                     const wrapper = document.createElement('div');
                     wrapper.className = 'image-wrapper';
 
-                    if (hasMultipleImages) {
-                        new Carousel(wrapper, art.images, art.title);
-                    } else {
-                        const imageSrc = art.src || art.images[0];
-                        const img = document.createElement('img');
-                        img.src = imageSrc;
-                        img.alt = art.title;
-                        img.loading = "lazy";
-                        wrapper.appendChild(img);
-                    }
+                    const imageSrc = art.src || art.images[0];
+                    const img = document.createElement('img');
+                    img.src = imageSrc;
+                    img.alt = art.title;
+                    img.loading = "lazy";
+                    wrapper.appendChild(img);
 
                     const mobileMeta = document.createElement('div');
                     mobileMeta.className = 'mobile-meta';
@@ -2616,6 +2613,8 @@
             init() {
                 this.createDOM();
                 this.attachEventListeners();
+                // Reset scroll to first image before observer starts
+                this.track.scrollLeft = 0;
                 this.initObserver();
             }
 
@@ -2704,14 +2703,20 @@
                 };
 
                 this.observer = new IntersectionObserver((entries) => {
+                    let bestEntry = null;
                     entries.forEach(entry => {
                         if (entry.isIntersecting) {
-                            const index = Array.from(this.track.children).indexOf(entry.target);
-                            this.activeIndex = index;
-                            this.updateIndicators(index);
-                            this.updateArrowVisibility(index);
+                            if (!bestEntry || entry.intersectionRatio > bestEntry.intersectionRatio) {
+                                bestEntry = entry;
+                            }
                         }
                     });
+                    if (bestEntry) {
+                        const index = Array.from(this.track.children).indexOf(bestEntry.target);
+                        this.activeIndex = index;
+                        this.updateIndicators(index);
+                        this.updateArrowVisibility(index);
+                    }
                 }, options);
 
                 Array.from(this.track.children).forEach(img => {

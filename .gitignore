@@ -7,3 +7,4 @@ node_modules/
 *.pdf
 **/screenshot*.png
 **/Screenshot*.png
+.playwright-mcp/
